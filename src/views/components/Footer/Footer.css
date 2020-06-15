@@ -1,0 +1,49 @@
+.teks{
+    font-family: 'Poppins','Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    color: #555;
+}
+.teks-sub{
+    font-family: 'Poppins','Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size: 25px;
+    color: #555;
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+ul{
+list-style-position: outside;
+list-style-image: none;
+list-style-type: none;
+padding-top: 0px;
+padding-right: 0px;
+padding-bottom: 0px;
+padding-left: 0px;
+}
+.gambar{
+    filter: grayscale(100%);
+}
+.gambar:hover{
+    filter: none;
+}
+
+.footer-reviews{
+    background-color: #11074e;
+    padding: 35px;
+}
+.image{
+    display: inline-block;
+    width: 25%;
+}
+.content{
+    display: inline-block;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    width: 73.5%;
+    margin-top: 5px;
+}
+.container-footer-3{
+    background-color:  #11074e;
+    padding: 5px;
+}

@@ -1,0 +1,8 @@
+.logo-trash{
+  padding: 5px;
+  color: white;
+}
+.logo-trash:hover{
+  transition-duration: 0.5s;
+  color: black;
+}
