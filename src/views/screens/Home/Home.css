@@ -7,6 +7,21 @@
     rgb(219, 133, 19) 100%
   );
 }
+.carousel-item-home-bg-2 {
+  /* background: rgb(7, 15, 32); */
+  background: linear-gradient(
+    rgba(7, 15, 32, 1) 10%,
+    rgb(218, 172, 46) 20%,
+    rgb(219, 133, 19) 50%,
+    rgb(218, 172, 46) 80%,
+    rgb(194, 176, 128) 90%,
+    rgb(212, 210, 203) 100%
+    /* rgb(218, 172, 46) 69%,
+    rgb(156, 139, 92) 30%,
+    rgba(7, 15, 32, 1) 10% */
+  );
+}
+
 
 .carousel-item-home {
   width: 100vw;
@@ -38,7 +53,7 @@ img{
 .container-home{
   height: 100%;
   padding: 60px;
-  background-color: #f2f2f2;
+  /* background-color: #f2f2f2; */
 }
 .bag-brand{
   background-color:#e0e0eb;
@@ -51,4 +66,10 @@ img{
 .cover{
   height: 100%;
   padding: 130px;
+}
+
+.figure{
+  border: thin black solid;
+  padding: 1.5em;
+  height: 100%;
 }

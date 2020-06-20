@@ -6,12 +6,21 @@ import ProductCard from "../../components/Cards/ProductCard";
 
 class Product extends React.Component {
     state = {
-        productData : [],
+        productData: [],
+        categoryFilter: "",
+        merekFilter: "",
+        filterProduk: {
+            filterHargaMax: 999999999999,
+            filterHargaMin: 0,
+            cariProduk:"",
+        },
     };
     getProductData = () => {
         Axios.get(`${API_URL}/products`)
             .then((res) => {
                 this.setState({ productData: res.data });
+                console.log(res.data)
+
             })
             .catch((err) => {
                 console.log(err);
@@ -22,11 +31,27 @@ class Product extends React.Component {
     }
     renderAllProduct = () => {
         return this.state.productData.map((val) => {
-            return (
-                <ProductCard data={val} className="m-2" />
-            )
+            if (val.category.toLowerCase().includes(this.state.categoryFilter) &&
+                val.price >= (this.state.filterProduk.filterHargaMin) && val.price <= (this.state.filterProduk.filterHargaMax) &&
+                val.merek.toLowerCase().includes(this.state.merekFilter)&&
+                val.productName.toLowerCase().includes(this.state.filterProduk.cariProduk.toLowerCase())) {
+                return (
+                    <ProductCard data={val} className="m-2" />
+                )
+            }
         })
     }
+    inputHandler = (e, field, form) => {
+        let { value } = e.target;
+        this.setState({
+            [form]: {
+                ...this.state[form],
+                [field]: value,
+            },
+        });
+        console.log(this.state.filterProduk.filterHargaMin)
+    }
+
     render() {
         return (
             <div className="container py-5">
@@ -37,7 +62,7 @@ class Product extends React.Component {
                                 <div class="card-header" id="headingOne">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        <b style={{color:"black"}}>Kategori</b>
+                                            <b style={{ color: "black" }}>Kategori</b>
                                         </button>
                                     </h5>
                                 </div>
@@ -46,11 +71,11 @@ class Product extends React.Component {
                                         <div class="form-group">
                                             <label for="exampleFormControlSelect1"></label>
                                             <select class="form-control" id="exampleFormControlSelect1">
-                                                <option>ALL</option>
-                                                <option>LAPTOP</option>
-                                                <option>DEKSTOP</option>
-                                                <option>TAB</option>
-                                                <option>HP</option>
+                                                <option onClick={() => this.setState({ categoryFilter: "" })}>ALL</option>
+                                                <option onClick={() => this.setState({ categoryFilter: "laptop" })}>LAPTOP</option>
+                                                <option onClick={() => this.setState({ categoryFilter: "dekstop" })}>DEKSTOP</option>
+                                                <option onClick={() => this.setState({ categoryFilter: "tab" })}>TAB</option>
+                                                <option onClick={() => this.setState({ categoryFilter: "phone" })}>HP</option>
                                             </select>
                                         </div>
                                     </div>
@@ -60,7 +85,7 @@ class Product extends React.Component {
                                 <div class="card-header" id="headingTwo">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            <b style={{color:"black"}}>Harga</b>
+                                            <b style={{ color: "black" }}>Harga</b>
                                         </button>
                                     </h5>
                                 </div>
@@ -70,13 +95,25 @@ class Product extends React.Component {
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">Rp</div>
                                             </div>
-                                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Harga Minimum" />
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inlineFormInputGroup"
+                                                onChange={(e) => this.inputHandler(e, "filterHargaMin", "filterProduk")}
+                                                value={this.state.filterProduk.filterHargaMin}
+                                                placeholder="Harga Minimum" />
                                         </div>
                                         <div class="input-group mb-2">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">Rp</div>
                                             </div>
-                                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Harga Maksimum" />
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inlineFormInputGroup"
+                                                onChange={(e) => this.inputHandler(e, "filterHargaMax", "filterProduk")}
+                                                value={this.state.filterProduk.filterHargaMax}
+                                                placeholder="Harga Maksimum" />
                                         </div>
                                     </div>
                                 </div>
@@ -85,13 +122,19 @@ class Product extends React.Component {
                                 <div class="card-header" id="headingThree">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        <b style={{color:"black"}}>Cari Nama Produk</b>
+                                            <b style={{ color: "black" }}>Cari Nama Produk</b>
                                         </button>
                                     </h5>
                                 </div>
                                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                     <div class="card-body">
-                                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="" />
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="inlineFormInputGroup"
+                                        onChange={(e)=> this.inputHandler(e,"cariProduk","filterProduk")} 
+                                        value={this.state.filterProduk.cariProduk}
+                                        placeholder="" />
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +142,7 @@ class Product extends React.Component {
                                 <div class="card-header" id="headingFour">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                        <b style={{color:"black"}}>Merek</b>
+                                            <b style={{ color: "black" }}>Merek</b>
                                         </button>
                                     </h5>
                                 </div>
@@ -108,12 +151,13 @@ class Product extends React.Component {
                                         <div class="form-group">
                                             <label for="exampleFormControlSelect1"></label>
                                             <select class="form-control" id="exampleFormControlSelect1">
-                                                <option>Apple</option>
-                                                <option>Samsung</option>
-                                                <option>Huawei</option>
-                                                <option>Oppo</option>
-                                                <option>Vivo</option>
-                                                <option>Xiaomi</option>
+                                                <option onClick={() => this.setState({ merekFilter: "" })}>All</option>
+                                                <option onClick={() => this.setState({ merekFilter: "apple" })}>Apple</option>
+                                                <option onClick={() => this.setState({ merekFilter: "samsung" })}>Samsung</option>
+                                                <option onClick={() => this.setState({ merekFilter: "huawei" })}>Huawei</option>
+                                                <option onClick={() => this.setState({ merekFilter: "oppo" })}>Oppo</option>
+                                                <option onClick={() => this.setState({ merekFilter: "vivo" })}>Vivo</option>
+                                                <option onClick={() => this.setState({ merekFilter: "xiaomi" })}>Xiaomi</option>
                                             </select>
                                         </div>
                                     </div>

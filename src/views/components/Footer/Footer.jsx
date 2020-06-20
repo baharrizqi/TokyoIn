@@ -1,5 +1,6 @@
 import React from 'react'
 import "./Footer.css";
+import { Link } from "react-router-dom";
 
 
 class Footer extends React.Component {
@@ -76,11 +77,15 @@ class Footer extends React.Component {
                         <div className="col-12 col-md-6 col-lg-3">
                             <h3 className="teks-sub">INFOMASI</h3>
                             <ul className="teks">
-                                <li>Tentang Kami</li>
-                                <li>Hubungi Kami</li>
-                                <li>FAQ</li>
-                                <li>Cari Toko Terdekat</li>
-                                <li>Privasi</li>
+                                <Link to="/aboutus">
+                                <li class="text-dark">Tentang Kami</li>
+                                </Link>
+                                <Link to="/aboutus">
+                                <li class="text-dark">Hubungi Kami</li>
+                                </Link>
+                                <Link to="/aboutus">
+                                <li class="text-dark">Cari Toko Terdekat</li>
+                                </Link>
                             </ul>
                         </div>
                         <div className="col-12 col-md-6 col-lg-3">

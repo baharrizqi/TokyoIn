@@ -131,13 +131,9 @@ class AuthScreen extends React.Component {
           />{" "}
           Show Password
           <div className="d-flex justify-content-center">
-            <ButtonUI
-              type="contained"
-              onClick={this.registerBtnHandler}
-              className="mt-4"
-            >
-              Register
-            </ButtonUI>
+            <button 
+            onClick={this.registerBtnHandler}
+            className="button mt-4"><span>Register</span></button>
           </div>
         </div>
         </center>
@@ -166,13 +162,9 @@ class AuthScreen extends React.Component {
             value={this.state.loginForm.password}
             onChange={(e) => this.inputHandler(e, "password", "loginForm")}/>
           <div className="d-flex justify-content-center">
-            <ButtonUI
-              onClick={this.loginBtnHandler}
-              type="contained"
-              className="mt-4"
-            >
-              Login
-            </ButtonUI>
+            <button 
+            onClick={this.loginBtnHandler}
+            class="button mt-4"><span>Login</span></button>
           </div>
         </div>
         </center>
@@ -186,16 +178,21 @@ class AuthScreen extends React.Component {
     }
     return (
       <center>
-      <div className="container m-5">
+      <div style={{backgroundColor:"#F5F5F5"}}>
+      <div className="container p-5"> 
           <div className="p-4" style={{border:"3px solid #FFD700",width:"500px",outline: "solid 5px"}} >
             <div className="d-flex flex-row justify-content-center">
               <button 
               type="button" 
-              class="btn btn-outline-dark"
+              class={`auth-screen-btn ${
+                this.state.activePage == "register" ? "active" : null
+              }`}
               onClick={() => this.setState({ activePage: "register" })}>Register</button>
               <button 
               type="button" 
-              class="btn btn-outline-dark ml-3"
+              class={`ml-3 auth-screen-btn ${
+                this.state.activePage == "login" ? "active" : null
+              }`}
               onClick={() => this.setState({ activePage: "login" })}>Login</button>
               {/* <ButtonUI
                 className={`auth-screen-btn ${
@@ -215,6 +212,9 @@ class AuthScreen extends React.Component {
               >
                 Login
               </ButtonUI> */}
+              <ButtonUI type="contained">
+              Log
+              </ButtonUI>
             </div>
             {this.props.user.errMsg ? (
               <div className="alert alert-danger mt-3">
@@ -223,6 +223,7 @@ class AuthScreen extends React.Component {
             ) : null}
             {this.renderAuthComponent()}
           </div>
+      </div>
       </div>
       </center>
     );

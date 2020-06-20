@@ -38,7 +38,6 @@ export const loginHandler = (userData) => {
               console.log(err);
             });
         } else {
-          alert("masuk");
           dispatch({
             type: ON_LOGIN_FAIL,
             payload: "Username atau password salah",

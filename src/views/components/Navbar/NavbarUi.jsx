@@ -23,8 +23,10 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 // import animasiGif from "../../../assets/images/animasiGif.gif"
 import { connect } from "react-redux";
 import { logoutHandler } from "../../../redux/actions";
+import ButtonUI from '../Button/Button';
 // import {nav,form,input} from "bootstrap"
 // import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { loginHandler } from "../../../redux/actions";
 
 
 class NavbarUi extends React.Component {
@@ -36,6 +38,11 @@ class NavbarUi extends React.Component {
         isOpen: false,
         setCollapsed: true,
         collapsed: true,
+        loginForm: {
+            username: "",
+            password: "",
+            showPassword: false,
+        },
     };
     setCollapsed = () => {
         this.setState({ setCollapsed: true })
@@ -51,10 +58,30 @@ class NavbarUi extends React.Component {
         this.props.onLogout();
     };
 
+    loginBtnHandler = () => {
+        const { username, password } = this.state.loginForm;
+        let newUser = {
+          username,
+          password,
+        };
+    
+        this.props.onLogin(newUser);
+    }
+
+    inputHandler = (e, field, form) => {
+        const { value } = e.target;
+        this.setState({
+          [form]: {
+            ...this.state[form],
+            [field]: value,
+          },
+        });
+    }
+
     render() {
         return (
             <>
-                <div className="py-5">
+                <div className="py-4">
                     <div>
                         {/* <img src={animasiGif} style={{height:"150px",width:"100%"}} alt=""/> */}
                         <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-warning ">
@@ -81,11 +108,31 @@ class NavbarUi extends React.Component {
                                     ) :
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Akun
-                                    </a>
-                                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                                <a class="dropdown-item" href="/auth">Login</a>
-                                                <a class="dropdown-item" href="/auth">Daftar</a>
+                                                AKUN
+                                            </a>
+                                            <div style={{width:"300px"}} class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                                <div className="p-2">
+                                                <input 
+                                                type="text" 
+                                                class="form-control" 
+                                                value={this.state.loginForm.username}
+                                                onChange={(e) => this.inputHandler(e, "username", "loginForm")}
+                                                placeholder="Username"/>
+                                                <input 
+                                                type="text" 
+                                                class="form-control mt-2"
+                                                value={this.state.loginForm.password} 
+                                                onChange={(e) => this.inputHandler(e, "password", "loginForm")}
+                                                placeholder="Password"/>
+                                                <ButtonUI
+                                                style={{width:"280px"}} 
+                                                className="mt-2"
+                                                type="contained"
+                                                onClick={this.loginBtnHandler}>
+                                                Login
+                                                </ButtonUI>
+                                                </div>   
+                                                <a class="dropdown-item" href="/auth">Belum punya akun? Daftar Disini</a>
                                             </div>
                                         </li>
                                     }
@@ -148,7 +195,7 @@ class NavbarUi extends React.Component {
                                         null
                                 }
                                 <form class="form-inline">
-                                    <input type="text" style={{ width: "150%" }} class="form-control" placeholder="Cari produk impianmu disini" />
+                                    <input type="text" style={{ width: "250px" }} class="form-control" placeholder="Cari produk impianmu disini" />
                                 </form>
                             </div>
                         </nav>
@@ -170,6 +217,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     onLogout: logoutHandler,
     // onChangeSearch: navbarInputHandler,
+    onLogin: loginHandler,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavbarUi)

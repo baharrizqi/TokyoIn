@@ -19,6 +19,7 @@ import Report from "./views/screens/Admin/Report";
 import NavbarUi from "./views/components/Navbar/NavbarUi";
 import Footer from "./views/components/Footer/Footer";
 import Product from "./views/screens/Product/Product";
+import AboutUs from "./views/screens/AboutUs/AboutUs";
 
 const cookieObj = new Cookie();
 
@@ -69,6 +70,7 @@ class App extends React.Component {
               path="/product/:productId"
               component={ProductDetails}
             />
+            <Route exact path="/aboutus" component={AboutUs}/>
             {this.renderAdminRoutes()}
             {this.renderProtectedRoutes()}
             <Route path="*" component={PageNotFound} />
