@@ -27,6 +27,7 @@ import ButtonUI from '../Button/Button';
 // import {nav,form,input} from "bootstrap"
 // import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { loginHandler } from "../../../redux/actions";
+import Cookies from "universal-cookie";
 
 
 class NavbarUi extends React.Component {
@@ -58,23 +59,32 @@ class NavbarUi extends React.Component {
         this.props.onLogout();
     };
 
+    // loginBtnHandler = () => {
+    //     const { username, password } = this.state.loginForm;
+    //     let newUser = {
+    //       username,
+    //       password,
+    //     };
+
+    //     this.props.onLogin(newUser);
+    // }
     loginBtnHandler = () => {
-        const { username, password } = this.state.loginForm;
-        let newUser = {
-          username,
-          password,
-        };
-    
-        this.props.onLogin(newUser);
+        this.props.onLogin(this.state.loginForm)
     }
+    // componentDidUpdate() {
+    //     if (this.props.user.id) {
+    //       const cookie = new Cookies();
+    //       cookie.set("authData", JSON.stringify(this.props.user), { path: "/" });
+    //     }
+    // }
 
     inputHandler = (e, field, form) => {
         const { value } = e.target;
         this.setState({
-          [form]: {
-            ...this.state[form],
-            [field]: value,
-          },
+            [form]: {
+                ...this.state[form],
+                [field]: value,
+            },
         });
     }
 
@@ -110,28 +120,28 @@ class NavbarUi extends React.Component {
                                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 AKUN
                                             </a>
-                                            <div style={{width:"300px"}} class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                            <div style={{ width: "300px" }} class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                                 <div className="p-2">
-                                                <input 
-                                                type="text" 
-                                                class="form-control" 
-                                                value={this.state.loginForm.username}
-                                                onChange={(e) => this.inputHandler(e, "username", "loginForm")}
-                                                placeholder="Username"/>
-                                                <input 
-                                                type="text" 
-                                                class="form-control mt-2"
-                                                value={this.state.loginForm.password} 
-                                                onChange={(e) => this.inputHandler(e, "password", "loginForm")}
-                                                placeholder="Password"/>
-                                                <ButtonUI
-                                                style={{width:"280px"}} 
-                                                className="mt-2"
-                                                type="contained"
-                                                onClick={this.loginBtnHandler}>
-                                                Login
+                                                    <input
+                                                        type="text"
+                                                        class="form-control"
+                                                        value={this.state.loginForm.username}
+                                                        onChange={(e) => this.inputHandler(e, "username", "loginForm")}
+                                                        placeholder="Username" />
+                                                    <input
+                                                        type="text"
+                                                        class="form-control mt-2"
+                                                        value={this.state.loginForm.password}
+                                                        onChange={(e) => this.inputHandler(e, "password", "loginForm")}
+                                                        placeholder="Password" />
+                                                    <ButtonUI
+                                                        style={{ width: "280px" }}
+                                                        className="mt-2"
+                                                        type="contained"
+                                                        onClick={this.loginBtnHandler}>
+                                                        Login
                                                 </ButtonUI>
-                                                </div>   
+                                                </div>
                                                 <a class="dropdown-item" href="/auth">Belum punya akun? Daftar Disini</a>
                                             </div>
                                         </li>
@@ -173,6 +183,9 @@ class NavbarUi extends React.Component {
                                                         ) :
                                                             (
                                                                 <>
+                                                                    <Link to="/profile">
+                                                                        <DropdownItem>Profile</DropdownItem>
+                                                                    </Link>
                                                                     <Link to="/">
                                                                         <DropdownItem>Wishlist</DropdownItem>
                                                                     </Link>

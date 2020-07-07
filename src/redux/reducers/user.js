@@ -6,8 +6,11 @@ const init_state = {
   id: 0,
   username: "",
   fullName: "",
-  address: {},
+  address: "",
   role: "",
+  email:"",
+  noTelp:"",
+  isVerified: false,
   errMsg: "",
   cookieChecked: false,
   cartItems: 0,
@@ -16,15 +19,29 @@ const init_state = {
 export default (state = init_state, action) => {
   switch (action.type) {
     case ON_LOGIN_SUCCESS:
-      const { username, fullName, role, id } = action.payload;
+      const { username, fullName, role,address,email,noTelp,isVerified, id } = action.payload;
       return {
         ...state,
+        id,
         username,
         fullName,
         role,
+        address,
+        email,
+        noTelp,
+        isVerified,
         id,
         cookieChecked: true,
       };
+    // case "ON_REGISTER_SUCCESS":
+    //   const { username, fullName, role, id } = action.payload;
+    //   return {
+    //     ...state,
+    //     username,
+    //     fullName,
+    //     role,
+    //     id,
+    //   }
     case ON_LOGIN_FAIL:
       return { ...state, errMsg: action.payload, cookieChecked: true };
     case "ON_REGISTER_FAIL":

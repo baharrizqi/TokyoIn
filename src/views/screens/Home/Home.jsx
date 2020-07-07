@@ -13,7 +13,7 @@ import iPadPro from "../../../assets/images/Showcase/iPad-Pro.png";
 import ProductCard from "../../components/Cards/ProductCard";
 
 
-
+// Dapatkan Info dan Promo menarik di website gadget
 
 const dummy = [
     {
@@ -23,13 +23,13 @@ const dummy = [
         id: 1,
     },
     {
-        productName: "Hati-Hati terhadap Penipuan",
+        productName: "Untuk mendapatkan informasi lebih lanjut mengenai produk elektronik terbaru, lakukan registrasi member pada website Gadget Indonesia",
         image: "https://eraspace.com/pub/media/kemana/bannerslider/banner/image/s/l/slider_banner_terimakasih_tim_medis_1600x542px_27_april_2020_.jpg",
-        desc: `Perlu ketahui modus penipuan`,
+        desc: ``,
         id: 2,
     },
     {
-        productName: "Dapatkan Info dan Promo menarik di website gadget",
+        productName: "Segala bentuk penipuan atau kejahatan yang mengatasnamakan Gadget Indonesia, Anda dapat melakukan laporan pengaduan di Customer Service",
         image: "https://eraspace.com/pub/media/kemana/bannerslider/banner/image/s/l/slider_banner_eraxpress_1600x542px_23_april_2020_.jpg",
         desc: ``,
         id: 3,
@@ -81,12 +81,12 @@ class Home extends React.Component {
     //         this.state.count = 0
     //     }
     // }
-    // gambarUtama = () => {
-    //     if (!this.state.count) {
-           
-    //     }
-    //     console.log(this.state.count)
-    // }
+    gambarUtama = () => {
+        if (this.state.count !=0) {
+           document.getElementById('textJourney').innerHTML=''
+        }
+        console.log(this.state.count)
+    }
     gantiGambar = () => {
         document.getElementById('textJourney').innerHTML =
             `<img id="text-kanan" class="img-fluid" style="width:100%" src="https://ksassets.timeincuk.net/wp/uploads/sites/54/2019/09/iPhone11camera-920x613.png" alt=""/>`
@@ -142,7 +142,7 @@ class Home extends React.Component {
     };
 
     getnewProductData = () => {
-        Axios.get(`${API_URL}/products`)
+        Axios.get(`${API_URL}/products/readProduct`)
             .then((res) => {
                 this.setState({ newProductData: res.data });
             })
@@ -213,25 +213,25 @@ class Home extends React.Component {
                         <div className="container-home">
                             <div className="container bag-gambarHome">
                                 <div id="textJourney" >
-                                    <img style={{ opacity: "1" }} class="img-fluid" src="https://crowdsupport.telstra.com.au/t5/image/serverpage/image-id/23310i215CFD4C0721175F/image-size/large?v=1.0&px=999" alt="" />
+                                    {/* <img style={{ opacity: "1" }} class="img-fluid" src="https://crowdsupport.telstra.com.au/t5/image/serverpage/image-id/23310i215CFD4C0721175F/image-size/large?v=1.0&px=999" alt="" /> */}
                                 </div>
                                 <br />
                                 <div className="row">
                                     <div className="col-sm">
                                         <p className="figure text-center">
-                                            <img onMouseOver={this.imgKiri}  class="img-fluid" style={{ height: "100%" }} src="https://ksassets.timeincuk.net/wp/uploads/sites/54/2019/09/iPhone11camera-920x613.png" alt="" />
+                                            <img onMouseOver={this.imgKiri} onClick={this.gambarUtama}  class="img-fluid" style={{ height: "100%" }} src="https://ksassets.timeincuk.net/wp/uploads/sites/54/2019/09/iPhone11camera-920x613.png" alt="" />
                                         iPhone 11
                                         </p>
                                     </div>
                                     <div className="col-sm">
                                         <p className="figure text-center">
-                                            <img onMouseOver={this.imgTengah}  class="img-fluid" style={{ height: "100%" }} src="https://www.sizescreens.com/wp-content/uploads/2019/09/Huawei-Mate-30-Pro-1.jpg" alt="..." />
+                                            <img onMouseOver={this.imgTengah} onClick={this.gambarUtama}  class="img-fluid" style={{ height: "100%" }} src="https://www.sizescreens.com/wp-content/uploads/2019/09/Huawei-Mate-30-Pro-1.jpg" alt="..." />
                                         Huawei P30 Pro
                                         </p>
                                     </div>
                                     <div className="col-sm">
                                         <p className="figure text-center">
-                                            <img onMouseOver={this.imgKanan}  class="img-fluid" style={{ height: "100%" }} src="https://images.samsung.com/id/smartphones/galaxy-s20/images/kv/galaxy-s20_highlights_kv_00.jpg" alt="..." />
+                                            <img onMouseOver={this.imgKanan} onClick={this.gambarUtama}  class="img-fluid" style={{ height: "100%" }} src="https://images.samsung.com/id/smartphones/galaxy-s20/images/kv/galaxy-s20_highlights_kv_00.jpg" alt="..." />
                                         Samsung S20
                                         </p>
                                     </div>

@@ -20,6 +20,8 @@ import NavbarUi from "./views/components/Navbar/NavbarUi";
 import Footer from "./views/components/Footer/Footer";
 import Product from "./views/screens/Product/Product";
 import AboutUs from "./views/screens/AboutUs/AboutUs";
+import ForgetPass from "./views/screens/Auth/ForgetPass";
+import Profile from "./views/screens/Auth/Profile";
 
 const cookieObj = new Cookie();
 
@@ -64,6 +66,8 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/auth" component={AuthScreen} />
+            <Route exact path="/forgetPass/:username/:verify" component={ForgetPass}/>
+            <Route exact path="/profile" component={Profile}/>
             <Route exact path="/product" component={Product}/>
             <Route
               exact
