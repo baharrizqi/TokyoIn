@@ -122,7 +122,7 @@ class NavbarUi extends React.Component {
                                             </a>
                                             <div style={{ width: "300px" }} class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                                 <div className="p-2">
-                                                    <input
+                                                    {/* <input
                                                         type="text"
                                                         class="form-control"
                                                         value={this.state.loginForm.username}
@@ -140,7 +140,8 @@ class NavbarUi extends React.Component {
                                                         type="contained"
                                                         onClick={this.loginBtnHandler}>
                                                         Login
-                                                </ButtonUI>
+                                                </ButtonUI> */}
+                                                <a class="dropdown-item" href="/auth">Sudah punya akun?Log in</a>
                                                 </div>
                                                 <a class="dropdown-item" href="/auth">Belum punya akun? Daftar Disini</a>
                                             </div>

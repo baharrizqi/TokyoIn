@@ -11,14 +11,7 @@ class Cart extends React.Component {
         ongkir: "instant",
     }
     getCartData = () => {
-        console.log(this.props.user.id)
-        const userId = this.props.user.id
-        Axios.get(`${API_URL}/carts`, {
-            params: {
-                userId: this.props.user.id,
-                _expand: "product",
-            }
-        })
+        Axios.get(`${API_URL}/carts/fillCart/${this.props.user.id}`)
             .then((res) => {
                 console.log(res.data)
                 this.setState({ cartData: res.data })
@@ -26,123 +19,234 @@ class Cart extends React.Component {
             .catch((err) => {
                 console.log(err)
             })
-    };
+    }
+    // getCartData = () => {
+    //     console.log(this.props.user.id)
+    //     const userId = this.props.user.id
+    //     Axios.get(`${API_URL}/carts`, {
+    //         params: {
+    //             userId: this.props.user.id,
+    //             _expand: "product",
+    //         }
+    //     })
+    //         .then((res) => {
+    //             console.log(res.data)
+    //             this.setState({ cartData: res.data })
+    //         })
+    //         .catch((err) => {
+    //             console.log(err)
+    //         })
+    // };
+
     renderCartData = () => {
         return this.state.cartData.map((val, idx) => {
-            const { quantity, product, id } = val
-            const { productName, category, price, disc, desc, image, merek } = product
-            let discHarga = (price - (price * (disc / 100)))
-            return (
-                <tr style={{ height: "140px" }}>
-                    <th>{idx + 1}</th>
-                    <td>
-                        <div className="row">
-                            <div className="col-sm-4">
-                                <img className="img-thumbnail" src={image} alt="" />
+            if (!val.paket) {
+                return (
+                    <tr style={{ height: "140px" }}>
+                        <th>{idx + 1}</th>
+                        <td>
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <img className="img-thumbnail" src={val.product.image} alt="" />
+                                </div>
+                                <div className="col-sm-8">
+                                    <h5>{val.product.productName}</h5>
+                                    <span>Product</span>
+                                    <p>
+                                        <i class="fas fa-trash bg-danger logo-trash"
+                                        onClick={() => this.deleteCartHandler(val.id)}
+                                        ></i>
+                                    </p>
+                                </div>
                             </div>
-                            <div className="col-sm-8">
-                                <h5>{productName}</h5>
-                                <i class="fas fa-trash bg-danger logo-trash" onClick={() => this.deleteCartHandler(id)}></i>
+                        </td>
+                        <td>
+                            <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                            }).format(val.product.price)}</p>
+                        </td>
+                        <td>{val.quantity}</td>
+                        <td>
+                            <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                            }).format(val.product.price * val.quantity)}</p>
+                        </td>
+                    </tr>
+                )
+            }
+            else {
+                return (
+                    <tr style={{ height: "140px" }}>
+                        <th>{idx + 1}</th>
+                        <td>
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <img className="img-thumbnail" src={val.paket.imagePaket} alt="" />
+                                </div>
+                                <div className="col-sm-8">
+                                    <h5>{val.paket.paketName}</h5>
+                                    <span>Paket</span>
+                                    <p>
+                                        <i class="fas fa-trash bg-danger logo-trash"
+                                        onClick={() => this.deleteCartHandler(val.id)}
+                                        ></i>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td>
-                        {
-                            disc > 0 ?
-                                (
-                                    <>
-                                        <span style={{ textDecoration: "line-through", color: "grey", fontSize: "14px" }}>
-                                            {new Intl.NumberFormat("id-ID", {
-                                                style: "currency",
-                                                currency: "IDR",
-                                            }).format(price)}
-                                        </span>
-                                        <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
-                                            style: "currency",
-                                            currency: "IDR",
-                                        }).format(discHarga)}</p>
-                                    </>
-                                ) :
-                                <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
-                                    style: "currency",
-                                    currency: "IDR",
-                                }).format(price)}</p>
-                        }
-                    </td>
-                    <td>{quantity}</td>
-                    <td>
-                        {
-                            disc > 0 ?
-                                (
-                                    <>
-                                        <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
-                                            style: "currency",
-                                            currency: "IDR",
-                                        }).format(discHarga * quantity)}</p>
-                                    </>
-                                ) :
-                                <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
-                                    style: "currency",
-                                    currency: "IDR",
-                                }).format(price * quantity)}</p>
-                        }
-                    </td>
-                </tr>
-            )
+                        </td>
+                        <td>
+                            <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                            }).format(val.paket.hargaPaket)}</p>
+                        </td>
+                        <td>{val.quantity}</td>
+                        <td>
+                            <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                            }).format(val.paket.hargaPaket * val.quantity)}</p>
+                        </td>
+                    </tr>
+                )
+            }
+
         })
     }
+
+    // renderCartData = () => {
+    //     return this.state.cartData.map((val, idx) => {
+    //         const { quantity, product, id } = val
+    //         const { productName, category, price, disc, desc, image, merek } = product
+    //         let discHarga = (price - (price * (disc / 100)))
+    //         return (
+    //             <tr style={{ height: "140px" }}>
+    //                 <th>{idx + 1}</th>
+    //                 <td>
+    //                     <div className="row">
+    //                         <div className="col-sm-4">
+    //                             <img className="img-thumbnail" src={image} alt="" />
+    //                         </div>
+    //                         <div className="col-sm-8">
+    //                             <h5>{productName}</h5>
+    //                             <i class="fas fa-trash bg-danger logo-trash" onClick={() => this.deleteCartHandler(id)}></i>
+    //                         </div>
+    //                     </div>
+    //                 </td>
+    //                 <td>
+    //                     {
+    //                         disc > 0 ?
+    //                             (
+    //                                 <>
+    //                                     <span style={{ textDecoration: "line-through", color: "grey", fontSize: "14px" }}>
+    //                                         {new Intl.NumberFormat("id-ID", {
+    //                                             style: "currency",
+    //                                             currency: "IDR",
+    //                                         }).format(price)}
+    //                                     </span>
+    //                                     <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
+    //                                         style: "currency",
+    //                                         currency: "IDR",
+    //                                     }).format(discHarga)}</p>
+    //                                 </>
+    //                             ) :
+    //                             <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
+    //                                 style: "currency",
+    //                                 currency: "IDR",
+    //                             }).format(price)}</p>
+    //                     }
+    //                 </td>
+    //                 <td>{quantity}</td>
+    //                 <td>
+    //                     {
+    //                         disc > 0 ?
+    //                             (
+    //                                 <>
+    //                                     <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
+    //                                         style: "currency",
+    //                                         currency: "IDR",
+    //                                     }).format(discHarga * quantity)}</p>
+    //                                 </>
+    //                             ) :
+    //                             <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
+    //                                 style: "currency",
+    //                                 currency: "IDR",
+    //                             }).format(price * quantity)}</p>
+    //                     }
+    //                 </td>
+    //             </tr>
+    //         )
+    //     })
+    // }
+
     renderSubTotalPrice = () => {
-        let totalPrice = 0;
+        let totalPrice = 0
 
-        this.state.cartData.forEach((val) => {
-            const { quantity, product } = val;
-            const { price, disc } = product;
-            let discHarga = (price - (price * (disc / 100)))
-            if (discHarga) {
-                totalPrice += quantity * discHarga;
-            } else {
-                totalPrice += quantity * price;
+        this.state.cartData.forEach((val)=>{
+            const {quantity} = val
+            if (!val.paket) {
+                totalPrice += quantity * val.product.price
+            }else{
+                totalPrice += quantity * val.paket.hargaPaket
             }
-
-        });
-
-        return totalPrice;
+        })
+        return totalPrice
     }
 
-    renderTotalPrice = () => {
-        let totalPrice = 0;
+    // renderSubTotalPrice = () => {
+    //     let totalPrice = 0;
 
-        this.state.cartData.forEach((val) => {
-            const { quantity, product } = val;
-            const { price,disc } = product;
-            let discHarga = (price - (price * (disc / 100)))
-            if (discHarga) {
-                totalPrice += quantity * discHarga;
-            } else {
-                totalPrice += quantity * price;
-            }
-        });
+    //     this.state.cartData.forEach((val) => {
+    //         const { quantity, product } = val;
+    //         const { price, disc } = product;
+    //         let discHarga = (price - (price * (disc / 100)))
+    //         if (discHarga) {
+    //             totalPrice += quantity * discHarga;
+    //         } else {
+    //             totalPrice += quantity * price;
+    //         }
 
-        let shippingPrice = 0;
+    //     });
 
-        switch (this.state.ongkir) {
-            case "instant":
-                shippingPrice = 100000;
-                break;
-            case "sameDay":
-                shippingPrice = 50000;
-                break;
-            case "express":
-                shippingPrice = 20000;
-                break;
-            default:
-                shippingPrice = 0;
-                break;
-        }
-        return priceFormatter(totalPrice + shippingPrice);
-    }
+    //     return totalPrice;
+    // }
+
+    // renderTotalPrice = () => {
+    //     let totalPrice = 0;
+
+    //     this.state.cartData.forEach((val) => {
+    //         const { quantity, product } = val;
+    //         const { price,disc } = product;
+    //         let discHarga = (price - (price * (disc / 100)))
+    //         if (discHarga) {
+    //             totalPrice += quantity * discHarga;
+    //         } else {
+    //             totalPrice += quantity * price;
+    //         }
+    //     });
+
+    //     let shippingPrice = 0;
+
+    //     switch (this.state.ongkir) {
+    //         case "instant":
+    //             shippingPrice = 100000;
+    //             break;
+    //         case "sameDay":
+    //             shippingPrice = 50000;
+    //             break;
+    //         case "express":
+    //             shippingPrice = 20000;
+    //             break;
+    //         default:
+    //             shippingPrice = 0;
+    //             break;
+    //     }
+    //     return priceFormatter(totalPrice + shippingPrice);
+    // }
     deleteCartHandler = (id) => {
-        Axios.delete(`${API_URL}/carts/${id}`)
+        Axios.delete(`${API_URL}/carts/deleteCart/${id}`)
             .then((res) => {
                 this.getCartData()
                 this.props.fillCart(this.props.user.id);
@@ -231,7 +335,7 @@ class Cart extends React.Component {
                                             </tr>
                                             <tr>
                                                 <th>Total</th>
-                                                <td>{this.renderTotalPrice()}</td>
+                                                {/* <td>{this.renderTotalPrice()}</td> */}
                                             </tr>
                                         </tbody>
                                         <tfoot>

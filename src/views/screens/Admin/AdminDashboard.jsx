@@ -39,6 +39,7 @@ class AdminDashboard extends React.Component {
     },
     createPaket: {
       paketName: "",
+      imagePaket:"",
     },
     addCategoryToProduct: {
       categoryName: 0,
@@ -52,8 +53,15 @@ class AdminDashboard extends React.Component {
       id: 0,
       categoryName: "",
     },
+    editPaket: {
+      id: 0,
+      paketName:"",
+      imagePaket: "",
+    },
     activeProducts: [],
+    activePakets: [],
     modalOpen: false,
+    pricePaket: [],
   };
 
   getProductList = () => {
@@ -77,7 +85,18 @@ class AdminDashboard extends React.Component {
   getPaketList = () => {
     Axios.get(`${API_URL}/paket/readPaket`)
       .then((res) => {
-        this.setState({ paketList: res.data })
+        this.setState({
+          paketList: res.data,
+          // pricePaket:[]
+        })
+        // console.log(res.data)
+        // res.data.map((val)=> {
+        //   let hargaTotal=0
+        //   val.products.map((val)=>{
+        //     hargaTotal += val.price
+        //   })
+        //   this.setState({pricePaket:[...this.state.pricePaket,hargaTotal]})
+        // })
       })
       .catch((err) => {
         console.log(err)
@@ -99,6 +118,7 @@ class AdminDashboard extends React.Component {
         console.log(res.data)
         swal("Good job!", "Product sudah terganti", "success");
         this.getProductList()
+        this.getPaketList()
       })
       .catch((err) => {
         console.log(err)
@@ -111,6 +131,27 @@ class AdminDashboard extends React.Component {
         swal("Good job!", "Category sudah terganti", "success");
         this.getProductList()
         this.getCategoryList()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  editPaketBtnHandler = (paketId) => {
+    Axios.get(`${API_URL}/paket/readPaket/${paketId}`)
+      .then((res) => {
+        console.log(res.data)
+        this.setState({ editPaket: res.data })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  editPaket = () => {
+    Axios.put(`${API_URL}/paket/editPaket`, this.state.editPaket)
+      .then((res) => {
+        console.log(res.data)
+        swal("Good job!", "Paket sudah terganti", "success");
+        this.getPaketList()
       })
       .catch((err) => {
         console.log(err)
@@ -134,6 +175,27 @@ class AdminDashboard extends React.Component {
         console.log(res.data)
         swal("Good job!", "Product sudah terhapus", "success");
         this.getProductList()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  deletePaket = (paketId) => {
+    Axios.delete(`${API_URL}/paket/${paketId}`)
+      .then((res) => {
+        console.log(res.data)
+        swal("Good job!", "Paket sudah terhapus", "success");
+        this.getPaketList()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  deleteProductinPaket = (paketId, productId) => {
+    Axios.delete(`${API_URL}/paket/${paketId}/${productId}`)
+      .then((res) => {
+        console.log(res.data)
+        this.getPaketList()
       })
       .catch((err) => {
         console.log(err)
@@ -190,6 +252,125 @@ class AdminDashboard extends React.Component {
     })
   }
 
+  renderSubTotalPricePaket = ([idx]) => {
+    let hargaTotal = 0
+    let arrharga = []
+    this.state.paketList.map((val) => {
+      val.products.map((val) => {
+        hargaTotal += val.price
+      })
+      // this.setState({pricePaket:[...this.state.pricePaket,hargaTotal]})
+      arrharga = [...arrharga, hargaTotal]
+    })
+    return arrharga[idx]
+  }
+  renderPaketTable = () => {
+    return this.state.paketList.map((val, idx) => {
+      const { id } = val;
+      // let pricePaket = (price)
+      return (
+        <>
+          <tr
+            onClick={() => {
+              if (this.state.activePakets.includes(idx)) {
+                this.setState({
+                  activePakets: [
+                    ...this.state.activePakets.filter((item) => item !== idx),
+                  ],
+                });
+              } else {
+                this.setState({
+                  activePakets: [...this.state.activePakets, idx],
+                });
+              }
+            }}
+          >
+            <td> {idx + 1} </td>
+            <td>
+              {val.paketName}
+            </td>
+            <td>
+              {/* {this.state.pricePaket[idx]}  */}
+              {val.hargaPaket}
+            </td>
+          </tr>
+          <tr
+            className={`collapse-item ${
+              this.state.activePakets.includes(idx) ? "active" : null
+              }`}
+          >
+            <td className="" colSpan={3}>
+              <div className="d-flex justify-content-around align-items-center">
+                <div className="d-flex flex-column">
+                  <table className="table table-dark" style={{ width: "500px" }}>
+                    <thead>
+                      <tr style={{ backgroundColor: "black" }}>
+                        <td>Nama Produk</td>
+                        <td>Price</td>
+                        <td>Stock</td>
+                        <td>Action</td>
+                      </tr>
+                    </thead>
+                    <tbody className="tabel-product-admin">
+                      {
+                        val.products.map((val) => {
+                          const { image, productName, price, description, stock, year, merek, sold } = val
+                          return (
+                            <>
+                              {/* <img src={image} alt="" /> */}
+                              <tr>
+                                <td>{productName}</td>
+                                <td>
+                                  <h6>
+                                    <span style={{ fontWeight: "normal" }}>
+                                      {" "}
+                                      {new Intl.NumberFormat("id-ID", {
+                                        style: "currency",
+                                        currency: "IDR",
+                                      }).format(price)}
+                                    </span>
+                                  </h6>
+                                </td>
+                                <td>
+                                  {stock}
+                                </td>
+                                <td>
+                                  <input
+                                    onClick={() => this.deleteProductinPaket(id, val.id)}
+                                    type="button" className="btn btn-danger" value="Delete" />
+                                </td>
+                              </tr>
+                            </>
+                          )
+                        })
+                      }
+                    </tbody>
+
+                  </table>
+                </div>
+                <div className="d-flex flex-column align-items-center ml-2">
+                  {/* <ButtonUI
+                    onClick={() => this.editPaketBtnHandler(id)}
+                    type="contained"
+                  >
+                    Edit Paket
+                  </ButtonUI> */}
+                  <button style={{width:"200px"}} onClick={()=> this.editPaketBtnHandler(id)} data-toggle="modal" data-target="#myModal-2" className="button"><span>Edit Paket</span></button>
+                  <ButtonUI
+                    onClick={() => this.deletePaket(id)}
+                    className="mt-3"
+                    type="contained">
+                    Delete Paket
+                  </ButtonUI>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </>
+      )
+    })
+  }
+
   renderProductList = () => {
     return this.state.productList.map((val, idx) => {
       const { id, productName, price, merek, stock, year, image, description } = val;
@@ -217,11 +398,6 @@ class AdminDashboard extends React.Component {
               style: "currency",
               currency: "IDR",
             }).format(price)}
-              {/* {" "}
-              {new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-              }).format(price)}{" "} */}
             </td>
           </tr>
           <tr
@@ -401,9 +577,12 @@ class AdminDashboard extends React.Component {
     Axios.post(`${API_URL}/products/${this.state.addPaketToProduct.productName}/paket/${this.state.addPaketToProduct.paketName}`)
       .then((res) => {
         console.log(res.data)
+        swal("Good job!", "Product sudah bertambah ke Paket", "success");
+        this.getPaketList()
       })
       .catch((err) => {
         console.log(err)
+        swal("Gagal!", err.response.data.message, "error");
       })
   }
 
@@ -436,6 +615,7 @@ class AdminDashboard extends React.Component {
     });
   };
 
+
   // editProductHandler = () => {
   //   Axios.put(
   //     `${API_URL}/products/${this.state.editForm.id}`,
@@ -461,11 +641,6 @@ class AdminDashboard extends React.Component {
     this.getCategoryList()
     this.getPaketList()
   }
-  // renderMerekProduct = () => {
-  //   return this.state.productList.map((val)=> {
-  //     return <option >{val.merek}</option>
-  //   })
-  // }
 
   render() {
     return (
@@ -477,7 +652,7 @@ class AdminDashboard extends React.Component {
           <table className="dashboard-table">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>No</th>
                 <th>Name</th>
                 <th>Price</th>
                 <span>
@@ -568,6 +743,40 @@ class AdminDashboard extends React.Component {
             </div>
           </div>
         </div>
+        <div className="dashboard">
+          <caption className="p-3">
+            <h2>Paket</h2>
+          </caption>
+          <table className="dashboard-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Paket</th>
+                <th>Price Paket</th>
+                <span>
+                  <img style={{ width: "50px" }} src="https://w1.pngwave.com/png/209/91/767/black-friday-icon-cheap-icon-discount-icon-price-icon-reduced-icon-sale-icon-tag-icon-yellow-sticker-png-clip-art.png" alt="" />
+                </span>
+              </tr>
+            </thead>
+            <tbody>{this.renderPaketTable()}</tbody>
+          </table>
+        </div>
+        <div class="modal fade" id="myModal-2" role="dialog">
+          <div style={{ marginTop: "100pt" }} class="modal-dialog modal-lg ">
+            <div class="modal-content">
+              <div class="modal-body">
+                <h2>Edit Paket</h2>
+                <input type="text" class="form-control" value={this.state.editPaket.paketName}  placeholder="Nama Paket" onChange={(e)=>this.inputHandler(e,"paketName","editPaket")} />
+                <input type="text" class="form-control mt-2" placeholder="Gambar Paket" onChange={(e)=>this.inputHandler(e,"imagePaket","editPaket")} />
+                <img style={{width:"500px"}} src={this.state.editPaket.imagePaket} alt=""/>
+              </div>
+              <div class="modal-footer">
+              <ButtonUI style={{ marginTop: "10px" }} type="contained" onClick={this.editPaket}>Save</ButtonUI>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="dashboard-form-container p-4">
           <caption className="mb-4 mt-2">
             <h2>Add / Edit / Delete Category</h2>
@@ -589,7 +798,7 @@ class AdminDashboard extends React.Component {
                 Add Category
               </ButtonUI>
             </div>
-            <div className="col-7 mt-2">
+            <div className="col-5 mt-2">
               <TextField
                 value={this.state.createPaket.paketName}
                 placeholder="Paket Name"
@@ -598,7 +807,16 @@ class AdminDashboard extends React.Component {
                 }
               />
             </div>
-            <div className="col-5 mt-2">
+            <div className="col-4 mt-2">
+              <TextField
+                value={this.state.createPaket.imagePaket}
+                placeholder="Image Paket"
+                onChange={(e) =>
+                  this.inputHandler(e, "imagePaket", "createPaket")
+                }
+              />
+            </div>
+            <div className="col-3 mt-2">
               <ButtonUI
                 onClick={this.createPaketHandler}
                 type="contained">

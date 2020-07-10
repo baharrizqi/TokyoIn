@@ -3,6 +3,7 @@ import { API_URL } from "../../constants/API";
 import Cookie from "universal-cookie";
 import userTypes from "../types/user";
 import swal from "sweetalert";
+import correctAnswer from "../../assets/music/Correct-answer.mp3"
 
 const { ON_LOGIN_FAIL, ON_LOGIN_SUCCESS, ON_LOGOUT_SUCCESS } = userTypes;
 
@@ -16,12 +17,22 @@ export const loginHandler = (userData) => {
           type: ON_LOGIN_SUCCESS,
           payload: res.data,
         });
-        alert("masuk")
         console.log(res.data)
+        swal("Good Job!", "Berhasil Login", "success");
+        Axios.get(`${API_URL}/carts/fillCart/${res.data.id}`)
+          .then((res) => {
+            dispatch({
+              type: "FILL_CART",
+              payload: res.data.length,
+            });
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       })
       .catch((err) => {
         console.log(err)
-        swal("Gagal Login", err.response.data.message , "error");
+        swal("Gagal Login", err.response.data.message, "error");
       })
   }
 }
@@ -72,15 +83,25 @@ export const loginHandler = (userData) => {
 export const userKeepLogin = (userData) => {
   return (dispatch) => {
     Axios.get(`${API_URL}/users/readUser/${userData.id}`)
-    .then((res)=> {
-      dispatch({
-        type: ON_LOGIN_SUCCESS,
-        payload: res.data
+      .then((res) => {
+        dispatch({
+          type: ON_LOGIN_SUCCESS,
+          payload: res.data
+        })
+        Axios.get(`${API_URL}/carts/fillCart/${res.data.id}`)
+          .then((res) => {
+            dispatch({
+              type: "FILL_CART",
+              payload: res.data.length,
+            });
+          })
+          .catch((err)=>{
+            console.log(err)
+          })
       })
-    })
-    .catch((err)=> {
-      console.log(err)
-    })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 }
 
@@ -201,19 +222,34 @@ export const cookieChecker = () => {
 
 export const fillCart = (userId) => {
   return (dispatch) => {
-    Axios.get(`${API_URL}/carts`, {
-      params: {
-        userId,
-      },
-    })
+    Axios.get(`${API_URL}/carts/fillCart/${userId}`)
       .then((res) => {
         dispatch({
           type: "FILL_CART",
           payload: res.data.length,
-        });
+        })
       })
       .catch((err) => {
-        console.log(err);
-      });
-  };
-};
+        console.log(err)
+      })
+  }
+}
+
+// export const fillCart = (userId) => {
+//   return (dispatch) => {
+//     Axios.get(`${API_URL}/carts`, {
+//       params: {
+//         userId,
+//       },
+//     })
+//       .then((res) => {
+//         dispatch({
+//           type: "FILL_CART",
+//           payload: res.data.length,
+//         });
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   };
+// };

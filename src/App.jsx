@@ -22,6 +22,7 @@ import Product from "./views/screens/Product/Product";
 import AboutUs from "./views/screens/AboutUs/AboutUs";
 import ForgetPass from "./views/screens/Auth/ForgetPass";
 import Profile from "./views/screens/Auth/Profile";
+import ProductDetailsPaket from "./views/screens/ProductDetailsPaket/ProductDetailsPaket";
 
 const cookieObj = new Cookie();
 
@@ -66,20 +67,25 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/auth" component={AuthScreen} />
-            <Route exact path="/forgetPass/:username/:verify" component={ForgetPass}/>
-            <Route exact path="/profile" component={Profile}/>
-            <Route exact path="/product" component={Product}/>
+            <Route exact path="/forgetPass/:username/:verify" component={ForgetPass} />
+            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/product" component={Product} />
             <Route
               exact
               path="/product/:productId"
               component={ProductDetails}
             />
-            <Route exact path="/aboutus" component={AboutUs}/>
+            <Route
+              exact
+              path="/productPaket/:paketId"
+              component={ProductDetailsPaket}
+            />
+            <Route exact path="/aboutus" component={AboutUs} />
             {this.renderAdminRoutes()}
             {this.renderProtectedRoutes()}
             <Route path="*" component={PageNotFound} />
           </Switch>
-          <Footer/>
+          <Footer />
         </>
       );
     } else {

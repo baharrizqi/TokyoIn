@@ -46,7 +46,7 @@ class ProductCard extends React.Component<ProductCardProps> {
             }
           </div>
           <div className="col-sm">
-            <div style={{ height: "160px" }}>
+            <div style={{ height: "160px",width:"170px" }}>
               <p className="mt-3">{productName}</p>
               <p style={{ fontSize: "14px", fontWeight: "bold" }}>{new Intl.NumberFormat("id-ID", {
                 style: "currency",
