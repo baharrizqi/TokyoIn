@@ -4,11 +4,13 @@ import Axios from "axios";
 import { API_URL } from "../../../constants/API";
 import { connect } from "react-redux";
 import { priceFormatter } from "../../../supports/helpers/formatter";
+import swal from "sweetalert";
+import { fillCart } from "../../../redux/actions";
 
 class Cart extends React.Component {
     state = {
         cartData: [],
-        ongkir: "instant",
+        ongkir: "JNE YES",
     }
     getCartData = () => {
         Axios.get(`${API_URL}/carts/fillCart/${this.props.user.id}`)
@@ -38,6 +40,71 @@ class Cart extends React.Component {
     //         })
     // };
 
+    getTime = () => {
+        let dateNow = new Date()
+        let time = dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds();
+        return dateNow.toLocaleString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }) + "-" + time
+    }
+
+    checkoutHandler = () => {
+        const notaTransaksi = {
+            totalPrice: this.renderTotalPrice(),
+            status: "pending",
+            tanggalBelanja: this.getTime(),
+            tanggalSelesai: "",
+            jasaPengiriman: this.state.ongkir,
+            statusPengiriman: "",
+            bktTrf: "",
+        }
+        Axios.get(`${API_URL}/carts/fillCart/${this.props.user.id}`)
+            .then((res) => {
+                Axios.put(`${API_URL}/carts/update/${this.props.user.id}`)
+                res.data.forEach((val) => {
+                    this.deleteCartHandler(val.id);
+                });
+                this.getCartData()
+                this.props.fillCart(this.props.user.id);
+                swal("Good Job!", "Pembelian Sukses", "success");
+                Axios.post(`${API_URL}/transaction/checkOut/${this.props.user.id}`, notaTransaksi)
+                    .then((res) => {
+                        // console.log(res.data)
+                        this.state.cartData.map((val) => {
+                            if (!val.paket) {
+                                Axios.post(`${API_URL}/transactionDetail/checkOutTransactionDetail/${res.data.id}/${val.product.id}/0`, {
+                                    price: val.product.price,
+                                    quantity: val.quantity,
+                                    totalPrice: val.product.price * val.quantity,
+                                })
+                                    .then((res) => {
+                                        console.log(res.data)
+                                    })
+                                    .catch((err) => {
+                                        console.log(err)
+                                    })
+                            } else {
+                                Axios.post(`${API_URL}/transactionDetail/checkOutTransactionDetail/${res.data.id}/0/${val.paket.id}`, {
+                                    price: val.paket.hargaPaket,
+                                    quantity: val.quantity,
+                                    totalPrice: val.paket.hargaPaket * val.quantity,
+                                })
+                                    .then((res) => {
+                                        console.log(res.data)
+                                    })
+                                    .catch((err) => {
+                                        console.log(err)
+                                    })
+                            }
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     renderCartData = () => {
         return this.state.cartData.map((val, idx) => {
             if (!val.paket) {
@@ -54,7 +121,7 @@ class Cart extends React.Component {
                                     <span>Product</span>
                                     <p>
                                         <i class="fas fa-trash bg-danger logo-trash"
-                                        onClick={() => this.deleteCartHandler(val.id)}
+                                            onClick={() => this.deleteCartHandler(val.id)}
                                         ></i>
                                     </p>
                                 </div>
@@ -90,7 +157,7 @@ class Cart extends React.Component {
                                     <span>Paket</span>
                                     <p>
                                         <i class="fas fa-trash bg-danger logo-trash"
-                                        onClick={() => this.deleteCartHandler(val.id)}
+                                            onClick={() => this.deleteCartHandler(val.id)}
                                         ></i>
                                     </p>
                                 </div>
@@ -184,15 +251,44 @@ class Cart extends React.Component {
     renderSubTotalPrice = () => {
         let totalPrice = 0
 
-        this.state.cartData.forEach((val)=>{
-            const {quantity} = val
+        this.state.cartData.forEach((val) => {
+            const { quantity } = val
             if (!val.paket) {
                 totalPrice += quantity * val.product.price
-            }else{
+            } else {
                 totalPrice += quantity * val.paket.hargaPaket
             }
         })
         return totalPrice
+    }
+    renderTotalPrice = () => {
+        let totalPrice = 0
+
+        this.state.cartData.forEach((val) => {
+            const { quantity } = val
+            if (!val.paket) {
+                totalPrice += quantity * val.product.price
+            } else {
+                totalPrice += quantity * val.paket.hargaPaket
+            }
+        })
+        let shippingPrice = 0
+        switch (this.state.ongkir) {
+            case "JNE YES":
+                shippingPrice = 100000;
+                break;
+            case "SICEPAT":
+                shippingPrice = 50000;
+                break;
+            case "JNE REGULER":
+                shippingPrice = 20000;
+                break;
+            default:
+                shippingPrice = 0;
+                break;
+        }
+        return totalPrice + shippingPrice
+
     }
 
     // renderSubTotalPrice = () => {
@@ -257,11 +353,11 @@ class Cart extends React.Component {
     }
     renderOngkirPrice = () => {
         switch (this.state.ongkir) {
-            case "instant":
+            case "JNE YES":
                 return priceFormatter(100000);
-            case "sameDay":
+            case "SICEPAT":
                 return priceFormatter(50000);
-            case "express":
+            case "JNE REGULER":
                 return priceFormatter(20000);
             default:
                 return "Free";
@@ -326,23 +422,25 @@ class Cart extends React.Component {
                                                         }
                                                         className="form-control w-100"
                                                     >
-                                                        <option value="instant">Instant 3-4 Jam</option>
-                                                        <option value="sameDay">Same Day 6-8 Jam</option>
-                                                        <option value="express">Express 1-2 Hari</option>
-                                                        <option value="economy">Economy 3-5 Hari</option>
+                                                        <option value="JNE YES">JNE YES 3-4 Jam</option>
+                                                        <option value="SICEPAT">SICEPAT 6-8 Jam</option>
+                                                        <option value="JNE REGULER">JNE REGULER 1-2 Hari</option>
+                                                        <option value="JNE OKE">JNE OKE 3-5 Hari</option>
                                                     </select>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>Total</th>
-                                                {/* <td>{this.renderTotalPrice()}</td> */}
+                                                <td>{priceFormatter(this.renderTotalPrice())}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
 
                                         </tfoot>
                                     </table>
-                                    <button style={{ width: "100%" }} type="button" class="btn btn-success">Checkout</button>
+                                    <button
+                                        onClick={this.checkoutHandler}
+                                        style={{ width: "100%" }} type="button" class="btn btn-success">Checkout</button>
                                 </div>
                             </div>
                         </div>
@@ -354,7 +452,7 @@ class Cart extends React.Component {
             return (
                 <div className="container py-4">
                     <div className="row">
-                        <div className="col-12">
+                        <div style={{ marginTop: "100px" }} className="col-12">
                             <div className="alert alert-info">Shopping Cart Empty</div>
                         </div>
                     </div>
@@ -368,4 +466,7 @@ const mapStateToProps = (state) => {
         user: state.user
     }
 }
-export default connect(mapStateToProps)(Cart)
+const mapDispatchToProps = {
+    fillCart,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Cart)

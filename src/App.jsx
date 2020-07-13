@@ -23,6 +23,8 @@ import AboutUs from "./views/screens/AboutUs/AboutUs";
 import ForgetPass from "./views/screens/Auth/ForgetPass";
 import Profile from "./views/screens/Auth/Profile";
 import ProductDetailsPaket from "./views/screens/ProductDetailsPaket/ProductDetailsPaket";
+import Pesanan from "./views/screens/Auth/Pesanan";
+import Payment from "./views/screens/Admin/Payment";
 
 const cookieObj = new Cookie();
 
@@ -41,6 +43,7 @@ class App extends React.Component {
       return (
         <>
           <Route exact path="/admin/dashboard" component={AdminDashboard} />
+          <Route exact path="/admin/payment" component={Payment}/>
           <Route exact path="/admin/payments" component={Payments} />
           <Route exact path="/admin/report" component={Report} />
         </>
@@ -54,6 +57,7 @@ class App extends React.Component {
         <>
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/history" component={History} />
+          <Route exact path="/pesanan" component={Pesanan}/>
         </>
       );
     }

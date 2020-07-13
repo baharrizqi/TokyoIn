@@ -21,6 +21,10 @@ class ProductDetailsPaket extends React.Component {
   addToCartHandler = () => {
     if (this.props.user.id == 0) {
       swal("Gagal!", "Harus Login terlebih dahulu untuk menambah ke keranjang", "error")
+    }else if (this.state.paketData.stockPaket <=0) {
+      swal("Gagal!", "Stock Paket ini Habis", "error")
+    }else if (this.props.user.role == "admin") {
+      swal("Gagal!", "Maaf Admin ga boleh belanja", "error")
     }
     else {
       Axios.get(`${API_URL}/carts/paketCart/${this.props.user.id}/${this.state.paketData.id}`)

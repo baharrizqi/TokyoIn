@@ -39,7 +39,7 @@ class AdminDashboard extends React.Component {
     },
     createPaket: {
       paketName: "",
-      imagePaket:"",
+      imagePaket: "",
     },
     addCategoryToProduct: {
       categoryName: 0,
@@ -55,7 +55,7 @@ class AdminDashboard extends React.Component {
     },
     editPaket: {
       id: 0,
-      paketName:"",
+      paketName: "",
       imagePaket: "",
     },
     activeProducts: [],
@@ -291,7 +291,16 @@ class AdminDashboard extends React.Component {
             </td>
             <td>
               {/* {this.state.pricePaket[idx]}  */}
-              {val.hargaPaket}
+              <span style={{ fontWeight: "normal" }}>
+                {" "}
+                {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                }).format(val.hargaPaket)}
+              </span>
+            </td>
+            <td>
+              {val.stockPaket}
             </td>
           </tr>
           <tr
@@ -355,7 +364,7 @@ class AdminDashboard extends React.Component {
                   >
                     Edit Paket
                   </ButtonUI> */}
-                  <button style={{width:"200px"}} onClick={()=> this.editPaketBtnHandler(id)} data-toggle="modal" data-target="#myModal-2" className="button"><span>Edit Paket</span></button>
+                  <button style={{ width: "200px" }} onClick={() => this.editPaketBtnHandler(id)} data-toggle="modal" data-target="#myModal-2" className="button"><span>Edit Paket</span></button>
                   <ButtonUI
                     onClick={() => this.deletePaket(id)}
                     className="mt-3"
@@ -581,7 +590,7 @@ class AdminDashboard extends React.Component {
         this.getPaketList()
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err.response.data)
         swal("Gagal!", err.response.data.message, "error");
       })
   }
@@ -644,7 +653,7 @@ class AdminDashboard extends React.Component {
 
   render() {
     return (
-      <div className="container py-4">
+      <div className="container py-5">
         <div className="dashboard">
           <caption className="p-3">
             <h2>Products</h2>
@@ -753,6 +762,7 @@ class AdminDashboard extends React.Component {
                 <th>No</th>
                 <th>Nama Paket</th>
                 <th>Price Paket</th>
+                <th>Stock Paket</th>
                 <span>
                   <img style={{ width: "50px" }} src="https://w1.pngwave.com/png/209/91/767/black-friday-icon-cheap-icon-discount-icon-price-icon-reduced-icon-sale-icon-tag-icon-yellow-sticker-png-clip-art.png" alt="" />
                 </span>
@@ -766,12 +776,12 @@ class AdminDashboard extends React.Component {
             <div class="modal-content">
               <div class="modal-body">
                 <h2>Edit Paket</h2>
-                <input type="text" class="form-control" value={this.state.editPaket.paketName}  placeholder="Nama Paket" onChange={(e)=>this.inputHandler(e,"paketName","editPaket")} />
-                <input type="text" class="form-control mt-2" placeholder="Gambar Paket" onChange={(e)=>this.inputHandler(e,"imagePaket","editPaket")} />
-                <img style={{width:"500px"}} src={this.state.editPaket.imagePaket} alt=""/>
+                <input type="text" class="form-control" value={this.state.editPaket.paketName} placeholder="Nama Paket" onChange={(e) => this.inputHandler(e, "paketName", "editPaket")} />
+                <input type="text" class="form-control mt-2" placeholder="Gambar Paket" onChange={(e) => this.inputHandler(e, "imagePaket", "editPaket")} />
+                <img style={{ width: "500px" }} src={this.state.editPaket.imagePaket} alt="" />
               </div>
               <div class="modal-footer">
-              <ButtonUI style={{ marginTop: "10px" }} type="contained" onClick={this.editPaket}>Save</ButtonUI>
+                <ButtonUI style={{ marginTop: "10px" }} type="contained" onClick={this.editPaket}>Save</ButtonUI>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>

@@ -171,11 +171,8 @@ class NavbarUi extends React.Component {
                                                                         Dashboard
                                                                 </Link>
                                                                 </DropdownItem>
-                                                                <Link to="/members">
-                                                                    <DropdownItem>Members</DropdownItem>
-                                                                </Link>
-                                                                <Link to="/payments">
-                                                                    <DropdownItem>Payments</DropdownItem>
+                                                                <Link to="/admin/payment">
+                                                                    <DropdownItem>Payment</DropdownItem>
                                                                 </Link>
                                                                 <Link to="/report">
                                                                     <DropdownItem>Report</DropdownItem>
@@ -187,8 +184,8 @@ class NavbarUi extends React.Component {
                                                                     <Link to="/profile">
                                                                         <DropdownItem>Profile</DropdownItem>
                                                                     </Link>
-                                                                    <Link to="/">
-                                                                        <DropdownItem>Wishlist</DropdownItem>
+                                                                    <Link to="/pesanan">
+                                                                        <DropdownItem>Pesanan</DropdownItem>
                                                                     </Link>
                                                                 </>
                                                             )
