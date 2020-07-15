@@ -4,6 +4,7 @@ import Axios from 'axios'
 import { API_URL } from '../../../constants/API'
 import swal from 'sweetalert'
 
+
 class Payment extends React.Component {
     state = {
         paymentPendingList: [],
@@ -145,6 +146,7 @@ class Payment extends React.Component {
                         <td>{val.status}</td>
                         <td>{val.jasaPengiriman}</td>
                         <td>{val.tanggalBelanja}</td>
+                        <td>{val.tanggalSelesai}</td>
                         <td>{val.totalPrice}</td>
                         <td>
                             <table>
@@ -319,7 +321,7 @@ class Payment extends React.Component {
                         <div class="header-card-payment" id="headingOne">
                             <h2 class="mb-0">
                                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    <b><p className="text-white">PENDING</p></b>
+                                    <b><h2 className="text-white">PENDING</h2></b>
                                 </button>
                             </h2>
                         </div>
@@ -350,7 +352,7 @@ class Payment extends React.Component {
                         <div class="header-card-payment" id="headingTwo">
                             <h2 class="mb-0">
                                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    <b><p className="text-white">ACCEPTED</p></b>
+                                    <b><h2 className="text-white">ACCEPTED</h2></b>
                                 </button>
                             </h2>
                         </div>
@@ -364,6 +366,7 @@ class Payment extends React.Component {
                                             <th scope="col">Status</th>
                                             <th scope="col">Jasa Pengiriman</th>
                                             <th scope="col">Tanggal Belanja</th>
+                                            <th scope="col">Tanggal Selesai</th>
                                             <th scope="col">Total Price</th>
                                             <th scope="col">Transaksi Detail</th>
                                             <th scope="col">Bukti Transfer</th>
@@ -380,7 +383,7 @@ class Payment extends React.Component {
                         <div class="header-card-payment" id="headingThree">
                             <h2 class="mb-0">
                                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    <b><p className="text-white">REJECTED</p></b>
+                                    <b><h2 className="text-white">REJECTED</h2></b>
                                 </button>
                             </h2>
                         </div>

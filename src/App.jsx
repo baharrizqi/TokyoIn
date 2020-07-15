@@ -6,16 +6,15 @@ import { connect } from "react-redux";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 
+
 import Home from "./views/screens/Home/Home";
 import AuthScreen from "./views/screens/Auth/AuthScreen";
 import ProductDetails from "./views/screens/ProductDetails/ProductDetails";
 import Cart from "./views/screens/Cart/Cart";
 import AdminDashboard from "./views/screens/Admin/AdminDashboard";
 import { userKeepLogin, cookieChecker } from "./redux/actions";
-import Payments from "./views/screens/Admin/Payments";
 import PageNotFound from "./views/screens/PageNotFound";
 import History from "./views/screens/History/History";
-import Report from "./views/screens/Admin/Report";
 import NavbarUi from "./views/components/Navbar/NavbarUi";
 import Footer from "./views/components/Footer/Footer";
 import Product from "./views/screens/Product/Product";
@@ -25,6 +24,7 @@ import Profile from "./views/screens/Auth/Profile";
 import ProductDetailsPaket from "./views/screens/ProductDetailsPaket/ProductDetailsPaket";
 import Pesanan from "./views/screens/Auth/Pesanan";
 import Payment from "./views/screens/Admin/Payment";
+import Report from "./views/screens/Admin/Report";
 
 const cookieObj = new Cookie();
 
@@ -44,8 +44,7 @@ class App extends React.Component {
         <>
           <Route exact path="/admin/dashboard" component={AdminDashboard} />
           <Route exact path="/admin/payment" component={Payment}/>
-          <Route exact path="/admin/payments" component={Payments} />
-          <Route exact path="/admin/report" component={Report} />
+          <Route exact path="/admin/report" component={Report}/>
         </>
       );
     }

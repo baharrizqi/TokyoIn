@@ -13,6 +13,9 @@ import iPadPro from "../../../assets/images/Showcase/iPad-Pro.png";
 import ProductCard from "../../components/Cards/ProductCard";
 import DITA from "../../../assets/music/DITA - How You Like That (Official Audio).mp3"
 import S20 from "../../../assets/images/Gif/GalaxyS20Ultra.gif"
+import OwlCarousel from 'react-owl-carousel'
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
 
 
 // Dapatkan Info dan Promo menarik di website gadget
@@ -43,6 +46,7 @@ class Home extends React.Component {
         animating: false,
         newProductData: [],
         count: 0,
+        larisProductData: [],
     };
 
 
@@ -152,6 +156,34 @@ class Home extends React.Component {
                 console.log(err);
             });
     };
+    getLarisProduct = () => {
+        Axios.get(`${API_URL}/products/larisProduct`)
+            .then((res) => {
+                console.log(res.data)
+                this.setState({ larisProductData: res.data })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+    renderTerlarisProduct = () => {
+        return this.state.larisProductData.map((val) => {
+            if (val.sold) {
+                return (
+                    <>
+                        <div class="item">
+                            <h4>{val.productName}</h4>
+                            <h6>Terjual :{" "}{val.sold} pcs</h6>
+                            <Link to={"/product/" + val.id}>
+                                <button type="button" class="btn btn-warning">View</button>
+                            </Link>
+                            <img style={{ width: "200px", height: "150px", objectFit: "contain" }} src={val.image} alt="" />
+                        </div>
+                    </>
+                )
+            }
+        })
+    }
 
     renderNewProduct = () => {
         return this.state.newProductData.map((val) => {
@@ -170,6 +202,7 @@ class Home extends React.Component {
         })
     }
     componentDidMount() {
+        this.getLarisProduct()
         this.getnewProductData();
     }
 
@@ -179,7 +212,7 @@ class Home extends React.Component {
                 <div>
                     {/* <audio  src={DITA} autoplay="autoplay"></audio> */}
                     <div className="carousel-item-home-bg-2">
-                        <audio style={{marginTop:"50px"}}   controls>
+                        <audio style={{ marginTop: "50px" }} controls>
                             <source src={DITA} type="audio/mp3" />
                         </audio>
                         <img data-toggle="modal" data-target="#myModal-1" src="https://www.static-src.com/siva/asset//08_2018/Microsite-Official-Store-HTA.jpg" class="img-fluid gambarBagian" style={{ padding: "70px" }} alt="" />
@@ -246,6 +279,30 @@ class Home extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <div className="bag-brand">
+                        <div style={{ padding: "70px" }} className="container">
+                            <h3><b>PRODUK</b> TERLARIS</h3>
+                            <div className="row d-flex flex-wrap justify-content-center">
+                                <OwlCarousel
+                                    className="owl-theme"
+                                    loop
+                                    margin={10}
+                                    nav
+                                >
+                                    {/* <div class="item"><h4>1</h4></div>
+                                    <div class="item"><h4>2</h4></div>
+                                    <div class="item"><h4>3</h4></div>
+                                    <div class="item"><h4>4</h4></div>
+                                    <div class="item"><h4>5</h4></div> */}
+                                    {this.renderTerlarisProduct()}
+                                </OwlCarousel>
+                            </div>
+
+                            {/* <div className="row d-flex flex-wrap justify-content-center">
+                                {this.renderAllProduct()}
+                            </div> */}
+                        </div>
+                    </div>
                     <div className="cover">
                         <div className="container">
                             <h3><b>PRODUK</b> TERBARU</h3>
@@ -258,6 +315,7 @@ class Home extends React.Component {
                             </div> */}
                         </div>
                     </div>
+
                     <div className="bag-brand">
                         <div className="container" style={{ backgroundColor: "#e0e0eb", padding: "70px" }}>
                             <h3><b>BRAND</b> PILIHAN</h3>

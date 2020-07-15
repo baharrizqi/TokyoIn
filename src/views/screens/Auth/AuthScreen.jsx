@@ -12,6 +12,12 @@ import { registerHandler, loginHandler } from "../../../redux/actions";
 import Axios from "axios";
 import { API_URL } from "../../../constants/API";
 import swal from "sweetalert";
+import Wallpaper2 from '../../../assets/images/Background/Wallpaper2.jpg'
+
+const gambarBg = {
+  // backgroundImage: `url(https://cdn.hipwallpaper.com/i/39/25/KvBq3V.jpg)`,
+  backgroundImage: `url(${Wallpaper2})`,
+}
 
 class AuthScreen extends React.Component {
   state = {
@@ -57,20 +63,6 @@ class AuthScreen extends React.Component {
     // }})
   };
 
-  // registerBtnHandler = () => {
-  //   const { username, fullName, password, email,address,noTelp } = this.state.registerForm;
-  //   let newUser = {
-  //     username,
-  //     fullName,
-  //     password,
-  //     email,
-  //     address,
-  //     noTelp,
-  //   };
-
-  //   this.props.onRegister(newUser);
-  //   console.log(newUser)
-  // };
 
   registerBtnHandler = () => {
     const { username, fullName, email, address, noTelp, password } = this.state.registerForm
@@ -99,17 +91,6 @@ class AuthScreen extends React.Component {
   }
 
 
-
-  // loginBtnHandler = () => {
-  //   const { username, password } = this.state.loginForm;
-  //   let newUser = {
-  //     username,
-  //     password,
-  //   };
-
-  //   this.props.onLogin(newUser);
-  // };
-
   checkboxHandler = (e, form) => {
     const { checked } = e.target;
 
@@ -124,10 +105,13 @@ class AuthScreen extends React.Component {
   };
 
   recoverPasswordHandler = () => {
+    if (this.state.formPassword == "") {
+      swal("Gagal!", "Form belum diisi", "error");
+    }
     Axios.get(`${API_URL}/users/forgetPass/${this.state.formPassword}`)
       .then((res) => {
         console.log(res.data)
-        alert("cek email")
+        swal("Good Job!", "Request Recover Password has been sent your email", "success");
       })
       .catch((err) => {
         console.log(err)
@@ -264,11 +248,12 @@ class AuthScreen extends React.Component {
     if (this.props.user.id > 0) {
       return <Redirect to="/" />;
     }
+    // "#F5F5F5"
     return (
       <center>
-        <div style={{ backgroundColor: "#F5F5F5" }}>
+        <div style={gambarBg}>
           <div className="container p-5">
-            <div className="p-4" style={{ border: "3px solid #FFD700", width: "500px", outline: "solid 5px" }} >
+            <div className="p-4" style={{ border: "3px solid #FFD700", width: "500px", outline: "solid 5px",backgroundColor:"rgb(211, 208, 225,0.4)" }} >
               <div className="d-flex flex-row justify-content-center">
                 <button
                   type="button"

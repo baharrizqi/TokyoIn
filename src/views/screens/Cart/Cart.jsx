@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { priceFormatter } from "../../../supports/helpers/formatter";
 import swal from "sweetalert";
 import { fillCart } from "../../../redux/actions";
+import { Redirect } from 'react-router-dom';
 
 class Cart extends React.Component {
     state = {

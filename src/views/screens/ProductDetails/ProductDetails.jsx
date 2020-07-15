@@ -6,6 +6,9 @@ import { connect } from "react-redux";
 import swal from "sweetalert";
 import { fillCart } from "../../../redux/actions";
 
+const gambarBg = {
+  backgroundImage: `url(https://wallpaperhd.wiki/wp-content/uploads/hd-backgrounds-websites-350851-download-free-website-background-1920x1080-for-mobile-hd.jpg)`
+}
 class ProductDetails extends React.Component {
   state = {
     productData: {
@@ -148,9 +151,10 @@ class ProductDetails extends React.Component {
       categories,
       id,
     } = this.state.productData;
+    // #e0e0eb
     return (
-      <div style={{ marginBottom: "50px", paddingBottom: "50px", paddingTop: "50px" }}>
-        <div style={{ backgroundColor: "#e0e0eb", padding: "70px" }} className="container ">
+      <div style={gambarBg} className="py-5">
+        <div style={{ backgroundColor: "rgb(211, 208, 225,0.4)", padding: "70px" }} className="container ">
           <div className="row ">
             <div className="col-6 text-center mt-4">
               <img
@@ -204,11 +208,7 @@ class ProductDetails extends React.Component {
                   </div>
                 </div>
               </div>
-
               <div className="d-flex flex-row mt-4">
-                <button
-                  type="button"
-                  class="btn btn-outline-danger">Add To Wishlist</button>
                 <button
                   type="button"
                   class="btn btn-outline-success ml-2"

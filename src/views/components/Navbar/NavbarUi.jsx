@@ -16,7 +16,7 @@ import {
     Form,
     Dropdown,
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
@@ -44,6 +44,8 @@ class NavbarUi extends React.Component {
             password: "",
             showPassword: false,
         },
+        kondisiLogout: false,
+        date:new Date(),
     };
     setCollapsed = () => {
         this.setState({ setCollapsed: true })
@@ -57,6 +59,7 @@ class NavbarUi extends React.Component {
     };
     logoutBtnHandler = () => {
         this.props.onLogout();
+
     };
 
     // loginBtnHandler = () => {
@@ -77,7 +80,7 @@ class NavbarUi extends React.Component {
     //       cookie.set("authData", JSON.stringify(this.props.user), { path: "/" });
     //     }
     // }
-
+  
     inputHandler = (e, field, form) => {
         const { value } = e.target;
         this.setState({
@@ -87,6 +90,14 @@ class NavbarUi extends React.Component {
             },
         });
     }
+    componentDidMount() {
+        this.timerID = setInterval(
+          () => this.tick(),
+          1000
+        );
+      }
+
+    tick() {    this.setState({      date: new Date()    });  }
 
     render() {
         return (
@@ -141,7 +152,7 @@ class NavbarUi extends React.Component {
                                                         onClick={this.loginBtnHandler}>
                                                         Login
                                                 </ButtonUI> */}
-                                                <a class="dropdown-item" href="/auth">Sudah punya akun?Log in</a>
+                                                    <a class="dropdown-item" href="/auth">Sudah punya akun?Log in</a>
                                                 </div>
                                                 <a class="dropdown-item" href="/auth">Belum punya akun? Daftar Disini</a>
                                             </div>
@@ -174,7 +185,7 @@ class NavbarUi extends React.Component {
                                                                 <Link to="/admin/payment">
                                                                     <DropdownItem>Payment</DropdownItem>
                                                                 </Link>
-                                                                <Link to="/report">
+                                                                <Link to="/admin/report">
                                                                     <DropdownItem>Report</DropdownItem>
                                                                 </Link>
                                                             </>
@@ -206,7 +217,7 @@ class NavbarUi extends React.Component {
                                         null
                                 }
                                 <form class="form-inline">
-                                    <input type="text" style={{ width: "250px" }} class="form-control" placeholder="Cari produk impianmu disini" />
+                                    <input disabled value={this.state.date.toLocaleString()} type="text" style={{ width: "250px" }} class="form-control" placeholder="Cari produk impianmu disini" />
                                 </form>
                             </div>
                         </nav>

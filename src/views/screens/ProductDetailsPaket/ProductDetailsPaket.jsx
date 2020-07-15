@@ -6,6 +6,9 @@ import { connect } from "react-redux";
 import swal from "sweetalert";
 import { fillCart } from "../../../redux/actions"
 
+const gambarBg = {
+  backgroundImage: `url(https://wallpaperhd.wiki/wp-content/uploads/hd-backgrounds-websites-350851-download-free-website-background-1920x1080-for-mobile-hd.jpg)`
+}
 class ProductDetailsPaket extends React.Component {
   state = {
     paketData: {
@@ -60,73 +63,6 @@ class ProductDetailsPaket extends React.Component {
     }
   }
 
-  // addToCartHandler = () => {
-  //     Axios.get(`${API_URL}/carts`,{
-  //         params: {
-  //             userId: this.props.user.id,
-  //             productId: this.state.productData.id,
-  //         }
-  //     })
-  //     .then((res)=>{
-  //         Axios.post(`${API_URL}/carts`,{
-  //             userId: this.props.user.id,
-  //             productId: this.state.productData.id,
-  //             quantity: 1,
-  //         })
-  //         .then((res)=> {
-  //             alert("item bertambah")
-  //             console.log(res.data)
-  //         })
-  //         .catch((err)=> {
-  //             console.log(err);
-  //         })
-  //     })
-  //     .catch((err)=> {
-  //         console.log(err)
-  //     })
-  // }
-  // addToCartHandler = () => {
-  //   // POST method ke /cart
-  //   // Isinya: userId, productId, quantity
-  //   // console.log(this.props.user.id);
-  //   console.log(this.state.productData.id);
-  //   const userId = this.props.user.id
-  //   const { id } = this.state.productData
-
-  //   Axios.get(`${API_URL}/carts`, {
-  //     params: {
-  //       productId: id,
-  //       userId: userId,
-  //     }
-  //   })
-  //     .then((res) => {
-  //       if (res.data.length == 0) {
-  //         Axios.post(`${API_URL}/carts`, {
-  //           userId: this.props.user.id,
-  //           productId: this.state.productData.id,
-  //           quantity: 1,
-  //         })
-  //           .then((res) => {
-  //             console.log(res);
-  //             swal(`Add to cart : ${res.data.quantity}`, "Your item has been added to your cart", "success");
-  //           })
-  //           .catch((err) => {
-  //             console.log(err);
-  //           });
-  //       } else {
-  //         Axios.patch(`${API_URL}/carts/${res.data[0].id}`, {
-  //           quantity: res.data[0].quantity + 1
-  //         })
-  //           .then((res) => {
-  //             console.log(res.data)
-  //             swal(`Add to cart : ${res.data.quantity}`, `Your item has been added to your cart`, "success");
-  //           })
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  // };
   componentDidMount() {
     Axios.get(`${API_URL}/paket/readPaket/${this.props.match.params.paketId}`)
       .then((res) => {
@@ -158,9 +94,10 @@ class ProductDetailsPaket extends React.Component {
       imagePaket,
       id,
     } = this.state.paketData;
+    // #e0e0eb
     return (
-      <div style={{ marginBottom: "50px", paddingBottom: "50px", paddingTop: "50px" }}>
-        <div style={{ backgroundColor: "#e0e0eb", padding: "70px" }} className="container ">
+      <div className="py-5" style={gambarBg}>
+        <div style={{ padding: "70px",backgroundColor: "rgb(211, 208, 225,0.4)" }} className="container ">
           <div className="row ">
             <div className="col-6 text-center mt-4">
               <img
@@ -208,9 +145,6 @@ class ProductDetailsPaket extends React.Component {
                 </div>
               </div>
               <div className="d-flex flex-row mt-4">
-                <button
-                  type="button"
-                  class="btn btn-outline-danger">Add To Wishlist</button>
                 <button
                   type="button"
                   class="btn btn-outline-success ml-2"

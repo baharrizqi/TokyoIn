@@ -2,6 +2,11 @@ import React from "react";
 import Axios from "axios";
 import { API_URL } from "../../../constants/API";
 import swal from "sweetalert";
+import Wallpaper2 from '../../../assets/images/Background/Wallpaper2.jpg'
+
+const gambarBg = {
+    backgroundImage: `url(${Wallpaper2})`,
+}
 
 class ForgetPass extends React.Component {
     state = {
@@ -29,16 +34,17 @@ class ForgetPass extends React.Component {
             },
         });
     };
+    // #F5F5F5
     render() {
         return (
-            <div style={{ backgroundColor: "#F5F5F5" }}>
-                <div className="container p-2 mt-5">
+            <div style={gambarBg}>
+                <div className="container py-5">
                     <center>
-                        <div className="p-4 mb-4" style={{ border: "3px solid #FFD700", width: "500px", outline: "solid 5px" }}>
+                        <div className="p-4 mb-4" style={{ border: "3px solid #FFD700", width: "500px", outline: "solid 5px",backgroundColor:"rgb(211, 208, 225,0.4)" }}>
                             <h3>{this.props.match.params.username}</h3>
                             <p className="mt-4">
                                 Welcome back.
-                        <br /> Please, isi password baru
+                        <br /> Please, fill new password 
                             </p>
                             <input
                                 style={{ width: "450px" }}

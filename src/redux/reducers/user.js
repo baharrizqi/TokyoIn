@@ -19,7 +19,7 @@ const init_state = {
 export default (state = init_state, action) => {
   switch (action.type) {
     case ON_LOGIN_SUCCESS:
-      const { username, fullName, role,address,email,noTelp,isVerified, id } = action.payload;
+      const { username, fullName, role,address,email,noTelp,verified, id } = action.payload;
       return {
         ...state,
         id,
@@ -29,8 +29,7 @@ export default (state = init_state, action) => {
         address,
         email,
         noTelp,
-        isVerified,
-        id,
+        isVerified:verified,
         cookieChecked: true,
       };
     // case "ON_REGISTER_SUCCESS":

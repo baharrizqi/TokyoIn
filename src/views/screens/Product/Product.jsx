@@ -113,15 +113,6 @@ class Product extends React.Component {
     }
     renderFilterPriceFix = () => {
         this.getCountProduct()
-        // if ((this.state.hargaMin == "" && this.state.hargaMax == "")|| (this.state.hargaMin == "" || this.state.hargaMax == "") ) {
-        //     // this.setState({
-        //     //     filterProduk: {
-        //     //         filterHargaMin: 0,
-        //     //         filterHargaMax: 99999999,
-        //     //     }
-        //     // })
-        //     this.setState({hargaMin:0,hargaMax:9999999999})
-        // }
         Axios.get(`${API_URL}/products/custom/${this.state.filterProduk.orderByType}/${this.state.filterProduk.orderByNamePrice}/${this.state.page}?minPrice=${this.state.hargaMin}&maxPrice=${this.state.hargaMax}&namaProduk=${this.state.filterProduk.cariProduk}&merek=${this.state.merekFilter}&categoryName=${this.state.categoryFilter}`)
             .then((res) => {
                 this.setState({ productData: res.data })

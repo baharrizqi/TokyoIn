@@ -2,9 +2,14 @@ import React from 'react'
 import { connect } from "react-redux";
 import Axios from 'axios';
 import { API_URL } from '../../../constants/API';
-import {logoutHandler} from '../../../redux/actions'
-import {Redirect} from 'react-router-dom'
+import { logoutHandler,changeProfile } from '../../../redux/actions'
+import { Redirect } from 'react-router-dom'
+import Wallpaper2 from '../../../assets/images/Background/Wallpaper2.jpg'
+import swal from 'sweetalert'
 
+const gambarBg = {
+    backgroundImage: `url(${Wallpaper2})`,
+}
 class Profile extends React.Component {
     state = {
         editProfile: {
@@ -21,7 +26,7 @@ class Profile extends React.Component {
             newPassword: "",
             showNewPassword: false,
         },
-        ubahPassword:false,
+        ubahPassword: false,
     }
     inputHandler = (e, field, form) => {
         const { value } = e.target;
@@ -45,40 +50,60 @@ class Profile extends React.Component {
         });
     };
     saveEditProfile = () => {
-        Axios.put(`${API_URL}/users/editProfile`,this.state.editProfile)
-        .then((res)=> {
-            console.log(res.data)
-        })
-        .catch((err)=> {
-            console.log(err)
-        })
+        Axios.put(`${API_URL}/users/editProfile`, this.state.editProfile)
+            .then((res) => {
+                console.log(res.data)
+                swal("Good Job!", "Edit Profile berhasil", "success");
+                this.props.changeProfile(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+                swal("Gagal!", err.response.data.message, "error");
+            })
     }
     saveEditPass = () => {
+        if (!this.state.editPassword.newPassword) {
+            return swal("Gagal!", "Password Baru Belum Diisi", "error")
+        }
         Axios.get(`${API_URL}/users/pass/${this.props.user.id}/${this.state.editPassword.oldPassword}/${this.state.editPassword.newPassword}`)
-        .then((res)=> {
-            console.log(res.data)
-            this.props.onLogout()
-            this.setState({
-                ubahPassword:true
+            .then((res) => {
+                console.log(res.data)
+                this.props.onLogout()
+                this.setState({
+                    ubahPassword: true
+                })
             })
-        })
-        .catch((err)=> {
-            console.log(err)
-        })
+            .catch((err) => {
+                console.log(err)
+                swal("Gagal!", err.response.data.message, "error")
+            })
     }
     render() {
         if (this.state.ubahPassword) {
-            return <Redirect to="/"/>
+            return <Redirect to="/" />
         }
         return (
-            <div style={{ backgroundColor: "#F5F5F5" }}>
-                <div className="container p-2 mt-5">
+            <div style={gambarBg}>
+                <div className="container p-5">
                     <center>
-                        <div className="p-4 mb-4" style={{ border: "3px solid #FFD700", width: "500px", outline: "solid 5px" }}>
+                        <div className="p-4 mb-4" style={{ border: "3px solid #FFD700", width: "500px", outline: "solid 5px", backgroundColor: "rgb(211, 208, 225,0.4)" }}>
+                            <img style={{ width: "100px" }} src="https://cdn.iconscout.com/icon/free/png-512/user-avatar-contact-portfolio-personal-portrait-profile-6-5623.png" alt="" />
                             <h3>{this.props.user.username}</h3>
+                            {
+                                this.props.user.isVerified == 1 ? (
+                                    <>
+                                        <h6>Verified</h6>
+                                    </>
+                                ) : (
+                                    <>
+                                    <h6>Not Verified</h6>
+                                    </>
+                                )
+                            }
+                            
                             <p className="mt-4">
                                 Edit Profile
-                        <br /> Please, Here!
+                            <br /> Please, Here!
                             </p>
                             <input
                                 style={{ width: "450px" }}
@@ -170,6 +195,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = {
     onLogout: logoutHandler,
+    changeProfile,
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)
