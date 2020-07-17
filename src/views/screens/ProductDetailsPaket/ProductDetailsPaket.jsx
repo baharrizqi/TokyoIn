@@ -24,12 +24,20 @@ class ProductDetailsPaket extends React.Component {
   addToCartHandler = () => {
     if (this.props.user.id == 0) {
       swal("Gagal!", "Harus Login terlebih dahulu untuk menambah ke keranjang", "error")
-    }else if (this.state.paketData.stockPaket <=0) {
+    }else if (this.state.paketData.stockPaket == 0) {
       swal("Gagal!", "Stock Paket ini Habis", "error")
     }else if (this.props.user.role == "admin") {
       swal("Gagal!", "Maaf Admin ga boleh belanja", "error")
     }
     else {
+      Axios.put(`${API_URL}/carts/update/0/${this.state.paketData.id}/${this.props.user.id}`)
+      .then((res)=>{
+        console.log(res.data)
+        this.getPaketDetail()
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
       Axios.get(`${API_URL}/carts/paketCart/${this.props.user.id}/${this.state.paketData.id}`)
         .then((res) => {
           if (res.data.length == 0) {
@@ -63,7 +71,7 @@ class ProductDetailsPaket extends React.Component {
     }
   }
 
-  componentDidMount() {
+  getPaketDetail= () =>{
     Axios.get(`${API_URL}/paket/readPaket/${this.props.match.params.paketId}`)
       .then((res) => {
         this.setState({ paketData: res.data });
@@ -72,6 +80,9 @@ class ProductDetailsPaket extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+  componentDidMount() {
+    this.getPaketDetail()
   }
   renderProductinPaket = () => {
     return this.state.paketData.products.map((val) => {

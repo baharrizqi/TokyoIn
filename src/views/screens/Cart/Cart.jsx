@@ -59,7 +59,7 @@ class Cart extends React.Component {
         }
         Axios.get(`${API_URL}/carts/fillCart/${this.props.user.id}`)
             .then((res) => {
-                Axios.put(`${API_URL}/carts/update/${this.props.user.id}`)
+                // Axios.put(`${API_URL}/carts/update/${this.props.user.id}`)
                 res.data.forEach((val) => {
                     this.deleteCartHandler(val.id);
                 });
@@ -343,7 +343,7 @@ class Cart extends React.Component {
     //     return priceFormatter(totalPrice + shippingPrice);
     // }
     deleteCartHandler = (id) => {
-        Axios.delete(`${API_URL}/carts/deleteCart/${id}`)
+        Axios.delete(`${API_URL}/carts/${id}`)
             .then((res) => {
                 this.getCartData()
                 this.props.fillCart(this.props.user.id);

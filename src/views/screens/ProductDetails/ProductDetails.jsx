@@ -54,12 +54,20 @@ class ProductDetails extends React.Component {
   addToCartHandler = () => {
     if (this.props.user.id == 0) {
       swal("Gagal!", "Harus Login terlebih dahulu untuk menambah ke keranjang", "error");
-    }else if (this.state.productData.stock <=0) {
+    }else if (this.state.productData.stock == 0) {
       swal("Gagal!", "Stock Product ini Habis", "error")
     }else if (this.props.user.role == "admin") {
       swal("Gagal!", "Maaf Admin ga boleh belanja", "error")
     }
     else {
+      Axios.put(`${API_URL}/carts/update/${this.state.productData.id}/0/${this.props.user.id}`)
+      .then((res)=>{
+        console.log(res.data)
+        this.getProductDetail()
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
       Axios.get(`${API_URL}/carts/productCart/${this.props.user.id}/${this.state.productData.id}`)
         .then((res) => {
           if (res.data.length == 0) {
@@ -131,7 +139,7 @@ class ProductDetails extends React.Component {
   //       console.log(err);
   //     })
   // };
-  componentDidMount() {
+  getProductDetail = () =>{
     Axios.get(`${API_URL}/products/readProduct/${this.props.match.params.productId}`)
       .then((res) => {
         this.setState({ productData: res.data });
@@ -139,6 +147,9 @@ class ProductDetails extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+  componentDidMount() {
+    this.getProductDetail()
   }
   render() {
     const {
