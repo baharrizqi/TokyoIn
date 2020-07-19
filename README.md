@@ -1,3 +1,9 @@
+FINAL PROJECT PURWADHIKA 19 JULI 2020 \\ 
+
+*************WELCOME******************
+----------GADGET INDONESIA-----------
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
