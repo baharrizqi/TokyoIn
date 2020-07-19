@@ -69,7 +69,7 @@ class AuthScreen extends React.Component {
     Axios.post(`${API_URL}/users`, this.state.registerForm)
       .then((res) => {
         console.log(res.data)
-        alert("sukses")
+        swal("Good Job", "You are registered, please check your email to verify your account", "success");
       })
       .catch((err) => {
         console.log(err)
@@ -127,7 +127,7 @@ class AuthScreen extends React.Component {
           <div className="mt-5">
             <h3>Register</h3>
             <p className="mt-4">
-              You will get the best recommendation for rent house in near of you
+              You will get the best recommendation for purchasing product around you
           </p>
             <input
               style={{ width: "450px" }}

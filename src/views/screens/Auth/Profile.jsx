@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from "react-redux";
 import Axios from 'axios';
 import { API_URL } from '../../../constants/API';
-import { logoutHandler,changeProfile } from '../../../redux/actions'
+import { logoutHandler, changeProfile } from '../../../redux/actions'
 import { Redirect } from 'react-router-dom'
 import Wallpaper2 from '../../../assets/images/Background/Wallpaper2.jpg'
 import swal from 'sweetalert'
+import ButtonUI from '../../components/Button/Button';
 
 const gambarBg = {
     backgroundImage: `url(${Wallpaper2})`,
@@ -78,6 +79,16 @@ class Profile extends React.Component {
                 swal("Gagal!", err.response.data.message, "error")
             })
     }
+    sendVerification = () => {
+        Axios.get(`${API_URL}/users/verifyProfile/${this.props.user.username}`)
+            .then((res) => {
+                console.log(res.data)
+                swal("Good Job!", "Request Verification has sent your email", "success")
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
     render() {
         if (this.state.ubahPassword) {
             return <Redirect to="/" />
@@ -95,12 +106,17 @@ class Profile extends React.Component {
                                         <h6>Verified</h6>
                                     </>
                                 ) : (
-                                    <>
-                                    <h6>Not Verified</h6>
-                                    </>
-                                )
+                                        <>
+                                            <h6>Not Verified</h6>
+                                            <ButtonUI
+                                                onClick={this.sendVerification}
+                                            >
+                                                Resend Verification
+                                    </ButtonUI>
+                                        </>
+                                    )
                             }
-                            
+
                             <p className="mt-4">
                                 Edit Profile
                             <br /> Please, Here!

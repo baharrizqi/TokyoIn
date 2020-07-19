@@ -375,7 +375,6 @@ class Product extends React.Component {
                                                             onChange={(e) => this.inputHandler(e, "cariProduk", "filterProduk")}
                                                             value={this.state.filterProduk.cariProduk}
                                                             placeholder="" />
-                                                        <button type="button" class="btn btn-success">Success</button>
                                                     </div>
                                                 </div>
                                             </div>

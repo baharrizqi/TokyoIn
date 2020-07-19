@@ -179,6 +179,7 @@ class AdminDashboard extends React.Component {
         console.log(res.data)
         swal("Good job!", "Product sudah terhapus", "success");
         this.getProductList()
+        this.getPaketList()
       })
       .catch((err) => {
         console.log(err)
@@ -640,289 +641,279 @@ class AdminDashboard extends React.Component {
 
   render() {
     return (
-      <div className="container py-5">
-        <div className="row">
-          <div className="col-sm">
-            <button className="button w-100"><a style={{ color: "white" }} href="#tableProduct"><span>Table Product</span></a></button>
-            <button className="button w-100 mt-2"><a style={{ color: "white" }} href="#addProduct"><span>Add Product</span></a></button>
-            <button className="button w-100 mt-2"><a style={{ color: "white" }} href="#tablePaket"><span>Table Paket</span></a></button>
-          </div>
-          <div className="col-sm">
-            <button className="button w-100"><a style={{ color: "white" }} href="#addPaketCategory"><span>Add Paket/Category</span></a></button>
-            <button className="button w-100 mt-2"><a style={{ color: "white" }} href="#addCategoryToProduct"><span>Add CategoryToProduct</span></a></button>
-            <button className="button w-100 mt-2"><a style={{ color: "white" }} href="#addProductToPaket"><span>Add ProductToPaket</span></a></button>
-          </div>
-        </div>
-        <div id="tableProduct" className="dashboard">
-          <caption className="p-3">
-            <h2>Products</h2>
-          </caption>
-          <table className="dashboard-table">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>Price</th>
-                <span>
-                  <img style={{ width: "50px" }} src="https://w1.pngwave.com/png/209/91/767/black-friday-icon-cheap-icon-discount-icon-price-icon-reduced-icon-sale-icon-tag-icon-yellow-sticker-png-clip-art.png" alt="" />
-                </span>
-              </tr>
-            </thead>
-            <tbody>{this.renderProductList()}</tbody>
-          </table>
-        </div>
-        <div style={gambarBg}>
-          <div id="addProduct" className="dashboard-form-container p-4">
-            <caption className="mb-4 mt-2">
-              <h2 className="text-white">Add Product</h2>
-            </caption>
-            <div className="row">
-              <div className="col-5">
-                <TextField
-                  value={this.state.createForm.productName}
-                  placeholder="Product Name"
-                  onChange={(e) =>
-                    this.inputHandler(e, "productName", "createForm")
-                  }
-                />
-              </div>
-              <div className="col-3">
-                <TextField
-                  value={this.state.createForm.merek}
-                  placeholder="Merek"
-                  onChange={(e) =>
-                    this.inputHandler(e, "merek", "createForm")
-                  }
-                />
-                {/* {this.renderMerekProduct()} */}
-              </div>
-              <div className="col-4">
-                <TextField
-                  value={this.state.createForm.price}
-                  placeholder="Price"
-                  onChange={(e) => this.inputHandler(e, "price", "createForm")}
-                />
-              </div>
-              <div className="col-12 mt-3">
-                <textarea
-                  value={this.state.createForm.description}
-                  onChange={(e) => this.inputHandler(e, "description", "createForm")}
-                  style={{ resize: "none" }}
-                  placeholder="Description"
-                  className="custom-text-input"
-                ></textarea>
-              </div>
-              <div className="col-8 mt-3">
-                <TextField
-                  value={this.state.createForm.image}
-                  placeholder="Image Source"
-                  onChange={(e) => this.inputHandler(e, "image", "createForm")}
-                />
-              </div>
-              <div className="col-2 mt-3">
-                <TextField
-                  value={this.state.createForm.stock}
-                  placeholder="Stock"
-                  onChange={(e) => this.inputHandler(e, "stock", "createForm")}
-                />
-              </div>
-              <div className="col-2 mt-3">
-                <TextField
-                  value={this.state.createForm.year}
-                  placeholder="Year"
-                  onChange={(e) => this.inputHandler(e, "year", "createForm")}
-                />
-              </div>
-              {/* <div className="col-6 mt-3">
-              <select
-                value={this.state.createForm.category}
-                className="custom-text-input h-100 pl-3"
-                onChange={(e) => this.inputHandler(e, "category", "createForm")}
-              >
-                <option value="Phone">Phone</option>
-                <option value="Tab">Tab</option>
-                <option value="Laptop">Laptop</option>
-                <option value="Desktop">Desktop</option>
-              </select>
-            </div> */}
-              <div className="col-3 mt-3">
-                <ButtonUI onClick={this.createProductHandler} type="contained">
-                  Create Product
-              </ButtonUI>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="tablePaket" className="dashboard">
-          <caption className="p-3">
-            <h2>Paket</h2>
-          </caption>
-          <table className="dashboard-table">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Nama Paket</th>
-                <th>Price Paket</th>
-                <th>Stock Paket</th>
-                <th>Stock Paket Gudang</th>
-                <span>
-                  <img style={{ width: "50px" }} src="https://w1.pngwave.com/png/209/91/767/black-friday-icon-cheap-icon-discount-icon-price-icon-reduced-icon-sale-icon-tag-icon-yellow-sticker-png-clip-art.png" alt="" />
-                </span>
-              </tr>
-            </thead>
-            <tbody>{this.renderPaketTable()}</tbody>
-          </table>
-        </div>
-        <div class="modal fade" id="myModal-2" role="dialog">
-          <div style={{ marginTop: "100pt" }} class="modal-dialog modal-lg ">
-            <div class="modal-content">
-              <div class="modal-body">
-                <h2>Edit Paket</h2>
-                <input type="text" class="form-control" value={this.state.editPaket.paketName} placeholder="Nama Paket" onChange={(e) => this.inputHandler(e, "paketName", "editPaket")} />
-                <input type="text" class="form-control mt-2" placeholder="Gambar Paket" onChange={(e) => this.inputHandler(e, "imagePaket", "editPaket")} />
-                <img style={{ width: "500px" }} src={this.state.editPaket.imagePaket} alt="" />
-              </div>
-              <div class="modal-footer">
-                <ButtonUI style={{ marginTop: "10px" }} type="contained" onClick={this.editPaket}>Save</ButtonUI>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="addPaketCategory" className="dashboard-form-container p-4">
-          <caption className="mb-4 mt-2">
-            <h2>Add_Edit_Delete_Category/Add_Paket </h2>
-          </caption>
+      <div style={{backgroundColor:"black"}}>
+        <div className="container py-5">
           <div className="row">
-            <div className="col-7">
-              <TextField
-                value={this.state.createCategory.categoryName}
-                placeholder="Category Name"
-                onChange={(e) =>
-                  this.inputHandler(e, "categoryName", "createCategory")
-                }
-              />
+            <div className="col-sm">
+              <button className="button w-100"><a style={{ color: "white" }} href="#tableProduct"><span>Table Product</span></a></button>
+              <button className="button w-100 mt-2"><a style={{ color: "white" }} href="#addProduct"><span>Add Product</span></a></button>
+              <button className="button w-100 mt-2"><a style={{ color: "white" }} href="#tablePaket"><span>Table Paket</span></a></button>
             </div>
-            <div className="col-5 ">
-              <ButtonUI
-                onClick={this.createCategoryHandler}
-                type="contained">
-                Add Category
-              </ButtonUI>
-            </div>
-            <div className="col-5 mt-2">
-              <TextField
-                value={this.state.createPaket.paketName}
-                placeholder="Paket Name"
-                onChange={(e) =>
-                  this.inputHandler(e, "paketName", "createPaket")
-                }
-              />
-            </div>
-            <div className="col-4 mt-2">
-              <TextField
-                value={this.state.createPaket.imagePaket}
-                placeholder="Image Paket"
-                onChange={(e) =>
-                  this.inputHandler(e, "imagePaket", "createPaket")
-                }
-              />
-            </div>
-            <div className="col-3 mt-2">
-              <ButtonUI
-                onClick={this.createPaketHandler}
-                type="contained">
-                Add Paket
-              </ButtonUI>
-            </div>
-            <div className="col-12 mt-2 table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Nama Category</th>
-                    <th className="text-center" colSpan="2">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.getCategoryTable()}
-                </tbody>
-              </table>
+            <div className="col-sm">
+              <button className="button w-100"><a style={{ color: "white" }} href="#addPaketCategory"><span>Add Paket/Category</span></a></button>
+              <button className="button w-100 mt-2"><a style={{ color: "white" }} href="#addCategoryToProduct"><span>Add CategoryToProduct</span></a></button>
+              <button className="button w-100 mt-2"><a style={{ color: "white" }} href="#addProductToPaket"><span>Add ProductToPaket</span></a></button>
             </div>
           </div>
-        </div>
-        <div style={gambarBg}>
-          <div id="addCategoryToProduct" className="dashboard-form-container p-4 ">
-            <caption className="mb-4 mt-2">
-              <h2 className="text-white">Add_Category_To_Product</h2>
+          <div style={{ backgroundColor: "#F5DEB3" }} id="tableProduct" className="dashboard">
+            <caption className="p-3">
+              <h2>Products</h2>
             </caption>
-            <div className="row">
-              <div className="col-6">
-                <select
-                  value={this.state.addCategoryToProduct.productName}
-                  className="custom-text-input h-100 pl-3"
-                  onChange={(e) => this.inputHandler(e, "productName", "addCategoryToProduct")}
-                >
-                  <option value=""></option>
-                  {this.renderProductName()}
-                </select>
-              </div>
-              <div className="col-4">
-                <select
-                  value={this.state.addCategoryToProduct.categoryName}
-                  className="custom-text-input h-100 pl-3"
-                  onChange={(e) => this.inputHandler(e, "categoryName", "addCategoryToProduct")}
-                >
-                  {/* <option value="Phone">Phone</option>
-                <option value="Tab">Tab</option>
-                <option value="Laptop">Laptop</option>
-                <option value="Desktop">Desktop</option> */}
-                  <option value=""></option>
-                  {this.renderCategoryList()}
-                </select>
-              </div>
-              <div className="col-3 mt-3">
-                <ButtonUI
-                  onClick={this.addCategoryToProductHandler}
-                  type="contained">
-                  Add Category To Product
+            <table className="dashboard-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <span>
+                    <img style={{ width: "50px" }} src="https://w1.pngwave.com/png/209/91/767/black-friday-icon-cheap-icon-discount-icon-price-icon-reduced-icon-sale-icon-tag-icon-yellow-sticker-png-clip-art.png" alt="" />
+                  </span>
+                </tr>
+              </thead>
+              <tbody>{this.renderProductList()}</tbody>
+            </table>
+          </div>
+          <div style={gambarBg}>
+            <div id="addProduct" className="dashboard-form-container p-4">
+              <caption className="mb-4 mt-2">
+                <h2 className="text-white">Add Product</h2>
+              </caption>
+              <div className="row">
+                <div className="col-5">
+                  <TextField
+                    value={this.state.createForm.productName}
+                    placeholder="Product Name"
+                    onChange={(e) =>
+                      this.inputHandler(e, "productName", "createForm")
+                    }
+                  />
+                </div>
+                <div className="col-3">
+                  <TextField
+                    value={this.state.createForm.merek}
+                    placeholder="Merek"
+                    onChange={(e) =>
+                      this.inputHandler(e, "merek", "createForm")
+                    }
+                  />
+                  {/* {this.renderMerekProduct()} */}
+                </div>
+                <div className="col-4">
+                  <TextField
+                    value={this.state.createForm.price}
+                    placeholder="Price"
+                    onChange={(e) => this.inputHandler(e, "price", "createForm")}
+                  />
+                </div>
+                <div className="col-12 mt-3">
+                  <textarea
+                    value={this.state.createForm.description}
+                    onChange={(e) => this.inputHandler(e, "description", "createForm")}
+                    style={{ resize: "none" }}
+                    placeholder="Description"
+                    className="custom-text-input"
+                  ></textarea>
+                </div>
+                <div className="col-8 mt-3">
+                  <TextField
+                    value={this.state.createForm.image}
+                    placeholder="Image Source"
+                    onChange={(e) => this.inputHandler(e, "image", "createForm")}
+                  />
+                </div>
+                <div className="col-2 mt-3">
+                  <TextField
+                    value={this.state.createForm.stock}
+                    placeholder="Stock"
+                    onChange={(e) => this.inputHandler(e, "stock", "createForm")}
+                  />
+                </div>
+                <div className="col-2 mt-3">
+                  <TextField
+                    value={this.state.createForm.year}
+                    placeholder="Year"
+                    onChange={(e) => this.inputHandler(e, "year", "createForm")}
+                  />
+                </div>
+                <div className="col-3 mt-3">
+                  <ButtonUI onClick={this.createProductHandler} type="contained">
+                    Create Product
               </ButtonUI>
+                </div>
               </div>
             </div>
-            <caption id="addProductToPaket" className="mb-4 mt-2">
-              <h2 className="text-white">Add_Paket_To_Product</h2>
+          </div>
+          <div style={{ backgroundColor: "#F5DEB3" }} id="tablePaket" className="dashboard">
+            <caption className="p-3">
+              <h2>Paket</h2>
+            </caption>
+            <table className="dashboard-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Paket</th>
+                  <th>Price Paket</th>
+                  <th>Stock Paket</th>
+                  <th>Stock Paket Gudang</th>
+                  <span>
+                    <img style={{ width: "50px" }} src="https://w1.pngwave.com/png/209/91/767/black-friday-icon-cheap-icon-discount-icon-price-icon-reduced-icon-sale-icon-tag-icon-yellow-sticker-png-clip-art.png" alt="" />
+                  </span>
+                </tr>
+              </thead>
+              <tbody>{this.renderPaketTable()}</tbody>
+            </table>
+          </div>
+          <div class="modal fade" id="myModal-2" role="dialog">
+            <div style={{ marginTop: "100pt" }} class="modal-dialog modal-lg ">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <h2>Edit Paket</h2>
+                  <input type="text" class="form-control" value={this.state.editPaket.paketName} placeholder="Nama Paket" onChange={(e) => this.inputHandler(e, "paketName", "editPaket")} />
+                  <input type="text" class="form-control mt-2" placeholder="Gambar Paket" onChange={(e) => this.inputHandler(e, "imagePaket", "editPaket")} />
+                  <img style={{ width: "500px" }} src={this.state.editPaket.imagePaket} alt="" />
+                </div>
+                <div class="modal-footer">
+                  <ButtonUI style={{ marginTop: "10px" }} type="contained" onClick={this.editPaket}>Save</ButtonUI>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{ backgroundColor: "#F5DEB3" }} id="addPaketCategory" className="dashboard-form-container p-4">
+            <caption className="mb-4 mt-2">
+              <h2>Add_Edit_Delete_Category/Add_Paket </h2>
             </caption>
             <div className="row">
-              <div className="col-6">
-                <select
-                  value={this.state.addPaketToProduct.productName}
-                  className="custom-text-input h-100 pl-3"
-                  onChange={(e) => this.inputHandler(e, "productName", "addPaketToProduct")}
-                >
-                  <option value=""></option>
-                  {this.renderProductName()}
-                </select>
+              <div className="col-7">
+                <TextField
+                  value={this.state.createCategory.categoryName}
+                  placeholder="Category Name"
+                  onChange={(e) =>
+                    this.inputHandler(e, "categoryName", "createCategory")
+                  }
+                />
               </div>
-              <div className="col-4">
-                <select
-                  value={this.state.addPaketToProduct.paketName}
-                  className="custom-text-input h-100 pl-3"
-                  onChange={(e) => this.inputHandler(e, "paketName", "addPaketToProduct")}
-                >
-                  {/* <option value="Phone">Phone</option>
+              <div className="col-5 ">
+                <ButtonUI
+                  onClick={this.createCategoryHandler}
+                  type="contained">
+                  Add Category
+              </ButtonUI>
+              </div>
+              <div className="col-5 mt-2">
+                <TextField
+                  value={this.state.createPaket.paketName}
+                  placeholder="Paket Name"
+                  onChange={(e) =>
+                    this.inputHandler(e, "paketName", "createPaket")
+                  }
+                />
+              </div>
+              <div className="col-4 mt-2">
+                <TextField
+                  value={this.state.createPaket.imagePaket}
+                  placeholder="Image Paket"
+                  onChange={(e) =>
+                    this.inputHandler(e, "imagePaket", "createPaket")
+                  }
+                />
+              </div>
+              <div className="col-3 mt-2">
+                <ButtonUI
+                  onClick={this.createPaketHandler}
+                  type="contained">
+                  Add Paket
+              </ButtonUI>
+              </div>
+              <div className="col-12 mt-2 table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama Category</th>
+                      <th className="text-center" colSpan="2">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.getCategoryTable()}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div style={gambarBg}>
+            <div id="addCategoryToProduct" className="dashboard-form-container p-4 ">
+              <caption className="mb-4 mt-2">
+                <h2 className="text-white">Add_Category_To_Product</h2>
+              </caption>
+              <div className="row">
+                <div className="col-6">
+                  <select
+                    value={this.state.addCategoryToProduct.productName}
+                    className="custom-text-input h-100 pl-3"
+                    onChange={(e) => this.inputHandler(e, "productName", "addCategoryToProduct")}
+                  >
+                    <option value=""></option>
+                    {this.renderProductName()}
+                  </select>
+                </div>
+                <div className="col-4">
+                  <select
+                    value={this.state.addCategoryToProduct.categoryName}
+                    className="custom-text-input h-100 pl-3"
+                    onChange={(e) => this.inputHandler(e, "categoryName", "addCategoryToProduct")}
+                  >
+                    {/* <option value="Phone">Phone</option>
                 <option value="Tab">Tab</option>
                 <option value="Laptop">Laptop</option>
                 <option value="Desktop">Desktop</option> */}
-                  <option value=""></option>
-                  {this.renderPaketList()}
-                </select>
-              </div>
-              <div className="col-3 mt-3">
-                <ButtonUI
-                  onClick={this.addPaketToProductHandler}
-                  type="contained">
-                  Add Paket To Product
+                    <option value=""></option>
+                    {this.renderCategoryList()}
+                  </select>
+                </div>
+                <div className="col-3 mt-3">
+                  <ButtonUI
+                    onClick={this.addCategoryToProductHandler}
+                    type="contained">
+                    Add Category To Product
               </ButtonUI>
+                </div>
+              </div>
+              <caption id="addProductToPaket" className="mb-4 mt-2">
+                <h2 className="text-white">Add_Paket_To_Product</h2>
+              </caption>
+              <div className="row">
+                <div className="col-6">
+                  <select
+                    value={this.state.addPaketToProduct.productName}
+                    className="custom-text-input h-100 pl-3"
+                    onChange={(e) => this.inputHandler(e, "productName", "addPaketToProduct")}
+                  >
+                    <option value=""></option>
+                    {this.renderProductName()}
+                  </select>
+                </div>
+                <div className="col-4">
+                  <select
+                    value={this.state.addPaketToProduct.paketName}
+                    className="custom-text-input h-100 pl-3"
+                    onChange={(e) => this.inputHandler(e, "paketName", "addPaketToProduct")}
+                  >
+                    {/* <option value="Phone">Phone</option>
+                <option value="Tab">Tab</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Desktop">Desktop</option> */}
+                    <option value=""></option>
+                    {this.renderPaketList()}
+                  </select>
+                </div>
+                <div className="col-3 mt-3">
+                  <ButtonUI
+                    onClick={this.addPaketToProductHandler}
+                    type="contained">
+                    Add Paket To Product
+              </ButtonUI>
+                </div>
               </div>
             </div>
           </div>

@@ -19,7 +19,7 @@ class ForgetPass extends React.Component {
         Axios.put(`${API_URL}/users/editForgetPass`, this.state.formRecoverPass)
             .then((res) => {
                 console.log(res.data)
-                swal("Good job!", "Category bertambah ke product", "success");
+                swal("Good job!", "New Password has been changed", "success");
             })
             .catch((err) => {
                 console.log(err)
